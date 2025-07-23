@@ -1,0 +1,90 @@
+<div class="h-100 w-100">
+  <div class="d-grid align-items-center d-grid login-box col-md-5 col-lg-3 col-sm-12" style="min-width: 280px;">
+    <div class="mt-5 mb-5">
+      <mat-icon class="position-relative d-block m-auto icon-display">grid_on</mat-icon>
+    </div>
+    <div class="position-relative h-100">
+<!--      <img src="assets/images/greenLogo.png" class="position-relative d-block m-auto">-->
+
+      <form [formGroup]="form">
+        <div *ngIf="!trocarSenha">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>
+              <mat-icon>person</mat-icon>
+              Usuário
+            </mat-label>
+            <input matInput [type]="'text'" formControlName="login">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>
+              <mat-icon>lock</mat-icon>
+              Senha
+            </mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" formControlName="senha" (keydown.enter)="login()">
+            <button mat-icon-button matSuffix (mousedown)="hide = !hide" [attr.aria-label]="'Esconder/Mostrar'"
+                    [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="trocarSenha">
+          <small class="mt-1 mb-1" style="font-weight: normal">Primeiro login identificado, por favor renove sua senha.</small>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>
+              <mat-icon>lock</mat-icon>
+              Nova senha
+            </mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" formControlName="novaSenha" (keydown)="onKeyDown()">
+            <button mat-icon-button matSuffix (mousedown)="hide = !hide" [attr.aria-label]="'Esconder/Mostrar'"
+                    [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>
+              <mat-icon>lock</mat-icon>
+              Confirmar senha
+            </mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" formControlName="confirmarSenha" (keydown)="onKeyDown()">
+            <button mat-icon-button matSuffix (mousedown)="hide = !hide" [attr.aria-label]="'Esconder/Mostrar'"
+                    [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-hint *ngIf="senhasInvalidas" style="color: #ec1616">As senhas não coicidem</mat-hint>
+          </mat-form-field>
+          <small style="font-weight: normal">A senha deve conter pelo menos um caractere especial, uma letra maiúscula, uma minúscula, um número e 8 caracteres no total.</small>
+        </div>
+
+        <dx-button
+          *ngIf="trocarSenha"
+          class="w-100 mt-2"
+          type="success"
+          text="Confirmar"
+          icon="save"
+          (onClick)="onTrocarSenhaClicked()"
+          [disabled]="!form.get('novaSenha').valid && !form.get('confirmarSenha').valid"
+        ></dx-button>
+        <dx-button
+          *ngIf="!trocarSenha"
+          class="w-100"
+          text="Entrar"
+          type="success"
+          [disabled]="!form.valid"
+          (onClick)="login()">
+        </dx-button>
+        <dx-button
+          *ngIf="!trocarSenha"
+          class="mt-2 w-100"
+          text="Relatórios"
+          icon="pdffile"
+          type="normal"
+          (onClick)="goToRelatorios()"
+          stylingMode="outlined">
+        </dx-button>
+      </form>
+    </div>
+  </div>
+</div>

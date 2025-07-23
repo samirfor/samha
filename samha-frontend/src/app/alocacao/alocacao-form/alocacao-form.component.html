@@ -1,0 +1,28 @@
+<mat-card class="mat-elevation-z8 m-auto mt-5 col-11">
+  <mat-card-title class="fw-lighter">
+    Cadastrar Alocação
+  </mat-card-title>
+  <mat-card-content class="mt-5 card-width">
+    <form [formGroup]="form">
+      <div class="pesquisar">
+        <mat-form-field appearance="standard" class="d-inline-block pesquisar-field">
+          <mat-label>Selecione a disciplina</mat-label>
+          <ng-container *ngIf="disciplina$ | async as disciplina; else notSet">
+            <mat-select [value]="setDisciplinaValue(disciplina.id)" formControlName="disciplina_id">
+              <mat-option [value]="disciplina.id">{{disciplina.nome}}</mat-option>
+            </mat-select>
+          </ng-container>
+          <ng-template #notSet>
+            <mat-select [disabled]="true"></mat-select>
+          </ng-template>
+        </mat-form-field>
+        <button type="button" class="search-button" mat-button (click)="openDialog(getDisciplinaComponent(), disciplinaData)">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+      <mat-card-actions>
+        <button mat-button class="sub-toolbar-button" (click)="salvar()" [disabled]="!form.valid" ><mat-icon>save</mat-icon> Salvar</button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+</mat-card>

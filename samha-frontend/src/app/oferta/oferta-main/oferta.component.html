@@ -1,0 +1,495 @@
+<mat-toolbar class="sub-toolbar">
+  <div class="d-flex justify-content-end w-100">
+    <dx-button
+      (onClick)="showPopupMudarVisiblidade = true"
+      stylingMode="outlined"
+      class="d-flex"
+      [visible]="oferta?.id != undefined && permissaoMudarVisibilidade"
+      type="normal">
+      <div style="height: 18px" class="d-flex">
+        <mat-icon style="font-size: 20px; margin-left: .3em" *ngIf="oferta?.publica">visibility</mat-icon>
+        <mat-icon style="font-size: 20px; margin-left: .3em" *ngIf="!oferta?.publica">visibility_off</mat-icon>
+        <span style="margin-left: .3em">Mudar visiblidade do horário</span></div>
+    </dx-button>
+    <span class="m-1"></span>
+    <dx-button
+      (onClick)="goToLogOferta()"
+      stylingMode="outlined"
+      type="normal"
+      icon="clock"
+      text="Log de Alterações (Oferta)">
+    </dx-button>
+    <span class="m-1"></span>
+    <dx-button
+      (onClick)="goToLogAulas()"
+      stylingMode="outlined"
+      type="normal"
+      icon="clock"
+      text="Log de Alterações (Aulas)">
+    </dx-button>
+  </div>
+</mat-toolbar>
+
+<div class="base-padding">
+  <mat-card class="col-md-12 mb-2">
+    <div class="d-inline-block w-100" style="height: 30px">
+      <mat-card-subtitle class="d-inline-block">
+        <span>Filtro de alocações</span>
+      </mat-card-subtitle>
+      <div class="float-end d-inline-block">
+        <dx-button
+          style="border: none"
+          (onClick)="filterOpened = !filterOpened"
+          [icon]="filterOpened ? 'chevronup' : 'chevrondown'"
+          height="30px"
+        ></dx-button>
+      </div>
+    </div>
+
+    <mat-card-content *ngIf="filterOpened" [@verticalInOut] class="mt-2">
+      <form [formGroup]="formGroup">
+        <samha-autocomplete-field
+          [resource]="'curso'"
+          [label]="'Curso'"
+          [control]="cursoControl"
+          (onChange)="onCursoChange($event)"
+          (loaded)="onCursoLoaded($event)"
+          (onOpened)="onCursoSelectionOpened()">
+        </samha-autocomplete-field>
+
+        <mat-form-field
+          class="d-block"
+          appearance="outline"
+          [ngClass]="oferta?.id ? '' : 'mb-3'"
+          *ngIf="turmaControl.value?.id">
+          <mat-label>Turma</mat-label>
+          <input type="text" matInput [formControl]="turmaControl" [matAutocomplete]="auto">
+          <mat-autocomplete
+            (optionSelected)="onTurmaChange()"
+            (opened)="onTurmaSelectOpened()"
+            autoActiveFirstOption #auto="matAutocomplete"
+            [displayWith]="displayFn">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+              {{option.nome}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-hint class="text-danger" *ngIf="!oferta?.id" >
+            Esta turma não possui uma oferta para o ano/semestre selecionado. Você precisará clicar no botão + na listagem de alocações para criar uma nova oferta!
+          </mat-hint>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" class="d-block" *ngIf="turmaControl.value?.id">
+          <mat-label>Turno</mat-label>
+          <mat-select formControlName="turno" [compareWith]="compareFunction" (selectionChange)="onTurnoChange()">
+            <mat-option [value]="'Matutino'">Matutino</mat-option>
+            <mat-option [value]="'Vespertino'">Vespertino</mat-option>
+            <mat-option [value]="'Noturno'">Noturno</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="d-block">
+          <mat-form-field appearance="outline" class="d-inline-block w-75">
+            <mat-label>Ano</mat-label>
+            <input matInput type="number" formControlName="ano" (change)="onAnoChange($event.target.value)" #anoInput>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="d-inline-block w-25">
+            <mat-label>Semestre</mat-label>
+            <input matInput type="number" [min]="1" [max]="2" formControlName="semestre"
+                   (change)="onSemestreChange($event.target.value)" #semestreInput>
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="col-md-12 col-sm-6 d-flex hide-scrollbar" style="overflow-x: auto">
+
+    <mat-card-content class="d-inline-block" style="width: 15%;">
+      <mat-card-subtitle>Alocações</mat-card-subtitle>
+
+      <form [formGroup]="formPeriodo">
+        <mat-form-field appearance="outline" class="d-block">
+            <mat-label *ngIf="turmaControl.value?.matriz.curso.semestral">Período</mat-label>
+            <mat-label *ngIf="!turmaControl.value?.matriz.curso.semestral">Ano da Turma</mat-label>
+            <input matInput type="number" [min]="1" [max]="qtPeriodos" formControlName="periodo"
+                  (change)="onPeriodoChange($event.target.value)" #periodoInput>
+        </mat-form-field> 
+      </form>
+
+      <div class="drag-list hide-scrollbar">
+        <div *ngIf="oferta?.id">
+          <div class="drag-border horizontal-box" style="min-height: 40px !important; display: flex;align-items: center;"
+               *ngFor="let alocacao of alocacoes"
+               draggable="true"
+               [ngClass]="alocacaoSelecionada?.id === alocacao?.id ? 'highlight-professor' : ''"
+               (click)="selectAlocacao(alocacao)"
+               (dragstart)="onListDraggerStart(alocacao)"
+               (dragend)="onDragEnd($event)">
+            <div style="width: 100%;height: 100%;display: inherit;align-items: center;">
+              <mat-icon style="scale: 0.6; width: 20px; height: 20px; font-size: 20px">drag_indicator</mat-icon>
+              <span
+                [class.disciplina-highlight]="isDisciplinaAlocacaoInvalida(alocacao)">{{alocacao.disciplina.sigla}}</span>&nbsp;<span>{{getNomeEncurtadoProfessor(alocacao.professor1.nome) + ' ' + getNomeEncurtadoProfessor(alocacao.professor2?.nome)}}</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="w-100 h-100 d-flex align-items-center flex-column justify-content-center align-content-center" *ngIf="!turmaControl.value">
+          <mat-icon>error</mat-icon>
+          <small style="font-weight: 400; font-size: 9pt; text-align: center">Não há turmas para o curso informado.</small>
+        </div>
+
+        <div class="w-100 h-100 d-flex align-items-center flex-column justify-content-center align-content-center" *ngIf="!(alocacoes.length > 0) && this.turmaControl.value && oferta?.id">
+          <mat-icon>link_off</mat-icon>
+          <small style="font-weight: 400; font-size: 9pt; text-align: center">Nenhuma alocação encontrada</small>
+        </div>
+
+        <dx-button
+          width="100%"
+          height="100%"
+          icon="add"
+          hint="Criar oferta"
+          *ngIf="!oferta?.id"
+          (onClick)="createOferta()"
+        >
+        </dx-button>
+      </div>
+
+      <mat-card-footer class="d-block p-3">
+        <div class="mb-2 d-block">
+          <div class="row">
+            <div class="col-sm-8">
+              <dx-button
+                class="w-100 footer-button"
+                stylingMode="outlined"
+                icon="check"
+                text="Validar"
+                hint="Validar Aulas"
+                [disabled]="!oferta?.id"
+                (onClick)="onValidarAulasClick()"
+              >
+              </dx-button>
+            </div>
+            <div class="col-sm-4">
+              <dx-button
+                [disabled]="!oferta?.id"
+                (onClick)="onControleQuantidadeDisciplinasClick()"
+                class="w-100 footer-button"
+                hint="Controle de quantidade de disciplinas">
+                <mat-icon style="font-size: 18px; width: 18px; height: 18px">library_books</mat-icon>
+              </dx-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-block">
+          <div class="row">
+            <div class="col-sm-8">
+              <dx-button
+                class="w-100 footer-button"
+                icon="save"
+                type="success"
+                text="Salvar"
+                (onClick)="onSalvarClicked()"
+                [disabled]="!ofertaChanged || !oferta?.id"
+              >
+              </dx-button>
+            </div>
+            <div class="col-sm-4">
+              <dx-button
+                class="w-100 footer-button"
+                icon="undo"
+                hint="Desfazer alterações"
+                (onClick)="onDesfazerAlteracoesClicked()"
+                [disabled]="!ofertaChanged"
+              >
+              </dx-button>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="d-block">
+          <mat-form-field appearance="outline" class="col-6 d-inline-block">
+            <mat-label>Tempo máximo</mat-label>
+            <input matInput type="number" [value]="tempoMaximo">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-6 d-inline-block">
+            <mat-label>Intevalo mínimo</mat-label>
+            <input matInput type="number" [value]="intervaloMinimo">
+          </mat-form-field>
+        </div>
+
+        <div class="d-block">
+          <div class="row">
+            <div class="col-12">
+              <dx-button
+                icon="checklist"
+                text="Validar Turmas"
+                hint="Validar Aulas"
+                [disabled]="!oferta?.id"
+                (onClick)="onValidarTurmasClick()"
+                class="w-100 footer-button">
+              </dx-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-block mt-3">
+          <div class="row">
+            <div class="col-12">
+              <dx-button
+                icon="copy"
+                text="Copiar Aulas"
+                hint="Copia as aulas do semestre anterior"
+                [disabled]="!oferta?.id || semestreCurrentValue==1 || turmaControl.value?.matriz.curso.semestral"
+                (onClick)="onCopiarAulasClick()"
+                class="w-100 footer-button">
+              </dx-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-block mt-2" *ngIf="notificacaoTurma">
+          <div class="row">
+            <div class="col-12">
+              <dx-progress-bar
+                [statusFormat]="format"
+                [value]="progresso"
+                [class.complete]="progresso == 100"></dx-progress-bar>
+            </div>
+          </div>
+        </div>
+      </mat-card-footer>
+
+    </mat-card-content>
+
+    <div class="divider d-inline-block"></div>
+
+    <mat-card-content class="d-block" style="min-width: 700px;"
+                      [ngClass]="notificacoesOpened ? 'partial-grid' : 'complete-grid'">
+      <mat-card-subtitle class="d-flex">
+        <span style="margin-right: .5em; margin-top: .175em">Grade de Horários</span>
+        <div *ngIf="oferta?.id">
+          <mat-icon *ngIf="oferta?.publica">visibility</mat-icon>
+          <mat-icon *ngIf="!oferta?.publica">visibility_off</mat-icon>
+        </div>
+      </mat-card-subtitle>
+
+      <div class="mt-4" *ngIf="turmaControl.value?.id">
+        <samha-oferta-grid
+          [matriz]="matriz"
+          [aulasConflitantes]="aulasConflitantes"
+          [turno]="formGroup.get('turno').value"
+          [novaAula]="novaAula"
+          [turma]="turmaControl.value"
+          (onAulaIndexChange)="onAulaIndexChanged($event)"
+          (onNovaAulaCreated)="onNovaAulaCreated($event)"
+          (onAulaDeleted)="onAulaDeleted($event)"
+        ></samha-oferta-grid>
+      </div>
+      <hr>
+
+      <samha-professor-grid [ano]="this.formGroup.get('ano').value"
+                            [semestre]="this.formGroup.get('semestre').value"
+                            [oferta]="oferta"
+                            [alocacao]="alocacaoSelecionada">
+      </samha-professor-grid>
+
+    </mat-card-content>
+    
+    <div class="divider d-inline-block" *ngIf="notificacoesOpened"></div>
+
+    <mat-card-content class="d-block" style="width: 20%; max-height: 900px"
+                      *ngIf="notificacoesOpened; else notificacaoButton">
+      <dx-button
+        style="position: absolute; right: 0; border: none; z-index: 15"
+        [icon]="'showpanel'"
+        (onClick)="notificacoesOpened = false"
+      >
+      </dx-button>
+      <dx-scroll-view [@pushInOut]>
+        <mat-card-subtitle class="mt-3">
+          <span>Notificações</span>
+        </mat-card-subtitle>
+        <!-- notificações normais -->
+        <cdk-accordion class="example-accordion" *ngIf="!notificacaoTurma">
+          <cdk-accordion-item
+            *ngFor="let item of notificacoes; let index = index;"
+            #accordionItem="cdkAccordionItem"
+            class="example-accordion-item accordion-config"
+            role="button"
+            tabindex="0"
+            [attr.id]="'accordion-header-' + index"
+            [attr.aria-expanded]="accordionItem.expanded"
+            [attr.aria-controls]="'accordion-body-' + index">
+            <div [class.accordion-selected]="accordionItem.expanded" class="example-accordion-item-header notification w-100" (click)="accordionItem.toggle()">
+              <p style="font-size: 10pt">{{ item.professor?.nome }}</p>
+              <span class="example-accordion-item-description">
+                  <span id="red"
+                        *ngIf="getQuantidadeNotificacao(item, 1) > 0">{{getQuantidadeNotificacao(item, 1)}}</span>
+                  <span id="yellow"
+                        *ngIf="getQuantidadeNotificacao(item, 2) > 0">{{getQuantidadeNotificacao(item, 2)}}</span>
+                  <span id="blue"
+                        *ngIf="getQuantidadeNotificacao(item, 3) > 0">{{getQuantidadeNotificacao(item, 3)}}</span>
+                </span>
+            </div>
+            <div
+              class="example-accordion-item-body"
+              role="region"
+              [style.display]="accordionItem.expanded ? '' : 'none'"
+              [attr.id]="'accordion-body-' + index"
+              [attr.aria-labelledby]="'accordion-header-' + index">
+              <div *ngFor="let mensagem of item.mensagens" [ngStyle]="{'border-radius': '5px', 'border': '1px solid ' + mensagem.cor}"
+                   class="mb-2 p-1">
+                <div class="accordion-card-header"
+                     [style]="'background-color: ' + mensagem.cor + ';' + 'color: '+ getCorTexto(mensagem.cor)">{{mensagem.titulo}}</div>
+                <div style="padding: 0 0.5em;">
+                  <div style="font-size: 9pt; font-weight: 400; margin-bottom: .2em;"
+                       *ngFor="let restricao of mensagem.restricoes">{{restricao}}</div>
+                </div>
+              </div>
+            </div>
+          </cdk-accordion-item>
+        </cdk-accordion>
+
+        <!-- notificações agrupadas por turma-->
+        <cdk-accordion class="example-accordion" *ngIf="notificacaoTurma">
+          <cdk-accordion-item
+            *ngFor="let itemTurma of notificacoes; let index = index;"
+            #accordionItemTurma="cdkAccordionItem"
+            class="example-accordion-item accordion-config"
+            role="button"
+            tabindex="0"
+            [attr.id]="'accordion-header-' + index"
+            [attr.aria-expanded]="accordionItemTurma.expanded"
+            [attr.aria-controls]="'accordion-body-' + index">
+            <div class="example-accordion-item-header notification w-100" (click)="accordionItemTurma.toggle()">
+              <p style="font-size: 10pt">{{ itemTurma.turma.nome }}</p>
+              <span class="example-accordion-item-description">
+                  <span id="red-turma"
+                        *ngIf="getQuantidadeNotificacaoTurma(itemTurma, 1) > 0">{{getQuantidadeNotificacaoTurma(itemTurma, 1)}}</span>
+                  <span id="yellow-turma"
+                        *ngIf="getQuantidadeNotificacaoTurma(itemTurma, 2) > 0">{{getQuantidadeNotificacaoTurma(itemTurma, 2)}}</span>
+                  <span id="blue-turma"
+                        *ngIf="getQuantidadeNotificacaoTurma(itemTurma, 3) > 0">{{getQuantidadeNotificacaoTurma(itemTurma, 3)}}</span>
+                </span>
+            </div>
+            <div
+              class="example-accordion-item-body"
+              role="region"
+              [style.display]="accordionItemTurma.expanded ? '' : 'none'"
+              [attr.id]="'accordion-body-' + index"
+              [attr.aria-labelledby]="'accordion-header-' + index">
+              <cdk-accordion class="example-accordion">
+                <cdk-accordion-item
+                  *ngFor="let item of itemTurma.conflitos; let j = index"
+                  #accordionItem="cdkAccordionItem"
+                  class="example-accordion-item accordion-config"
+                  role="button"
+                  tabindex="1"
+                  [attr.id]="'accordion-header-' + index + '-' + j"
+                  [attr.aria-expanded]="accordionItem.expanded"
+                  [attr.aria-controls]="'accordion-body-' + index + '-' + j">
+                  <div class="example-accordion-item-header notification w-100" (click)="accordionItem.toggle()">
+                    <p style="font-size: 10pt">{{ item.professor?.nome }}</p>
+                  </div>
+                  <div
+                    class="example-accordion-item-body"
+                    role="region"
+                    [style.display]="accordionItemTurma.expanded ? '' : 'none'"
+                    [attr.id]="'accordion-body-' + index + '-' + j"
+                    [attr.aria-labelledby]="'accordion-header-' + index + '-' + j">
+                    <div *ngFor="let mensagem of item.mensagens" [ngStyle]="{'border-radius': '5px', 'border': '1px solid ' + mensagem.cor}"
+                         class="mb-2 p-1">
+                      <div class="accordion-card-header"
+                           [style]="'background-color: ' + mensagem.cor + ';' + 'color: '+ getCorTexto(mensagem.cor)">{{mensagem.titulo}}</div>
+                      <div style="padding: 0 0.5em;">
+                        <div style="font-size: 9pt; font-weight: 400; margin-bottom: .2em;"
+                             *ngFor="let restricao of mensagem.restricoes">{{restricao}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </cdk-accordion-item>
+              </cdk-accordion>
+            </div>
+
+          </cdk-accordion-item>
+        </cdk-accordion>
+      </dx-scroll-view>
+    </mat-card-content>
+
+    <ng-template #notificacaoButton>
+      <div *ngIf="notificacoes.length > 0"
+           class="notification-warning">
+        !
+      </div>
+      <dx-button
+        style="position: absolute; right: 0; border: none"
+        [icon]="'hidepanel'"
+        (onClick)="notificacoesOpened = true"
+      ></dx-button>
+    </ng-template>
+  </mat-card>
+</div>
+
+<dx-popup [(visible)]="showPopupMudarVisiblidade" height="200" width="400" title="Mudar visiblidade do horário">
+  <div class="container-fluid container">
+    <div class="row">
+      <div class="col-12">
+        Você está prestes a modificar a visiblidade do horário para {{this.oferta?.publica ? 'privado' : 'público'}},
+        deseja continuar?
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-12 d-flex justify-content-center">
+        <dx-button
+          text="Confirmar"
+          type="success"
+          icon="save"
+          (onClick)="mudarVisiblidadeOferta()">
+        </dx-button>
+        <span class="m-1"></span>
+        <dx-button
+          text="Cancelar"
+          type="normal"
+          stylingMode="outlined"
+          icon="clear"
+          (onClick)="showPopupMudarVisiblidade = false">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+
+<dx-popup title="Alerta: As ofertas já são públicas!" [(visible)]="showPopupOfertaPublica" height="250" width="700">
+  <div class="container-fluid container">
+    <div class="row">
+      <div class="col-12 text-center">
+        As ofertas do ano/semestre selecionado já foram definidas como públicas, você está prestes a criar uma nova oferta após a liberação dos horários.
+        Caso deseje continuar, as alterações realizadas nesta oferta estarão disponíveis para os alunos e professores sem acesso ao sistema.
+        <br><br>
+        <span style="color: #ff9966; font-weight: bolder"> É recomendado tornar o horário privado antes de prosseguir com esta ação. </span>
+      </div>
+    </div>
+    <div class="row position-fixed w-100" style="bottom: 25px;">
+      <div class="col-12 d-flex justify-content-center">
+        <dx-button
+          text="Confirmar"
+          type="success"
+          icon="save"
+          (onClick)="saveOferta()">
+        </dx-button>
+        <span class="m-1"></span>
+        <dx-button
+          text="Cancelar"
+          type="normal"
+          stylingMode="outlined"
+          icon="clear"
+          (onClick)="showPopupOfertaPublica = false">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>

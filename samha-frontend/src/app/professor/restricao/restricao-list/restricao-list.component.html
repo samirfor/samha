@@ -1,0 +1,56 @@
+<ng-template #loading>
+  <div class="loading-spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>
+<div *ngIf="dataSource$ | async as dataSource; else loading">
+  <div class="base-padding">
+    <mat-card class="mat-elevation-z8 m-auto mb-5">
+    <mat-card-title>
+      <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Restrições</span></mat-toolbar>
+    </mat-card-title>
+
+    <mat-card-content>
+      <dx-button
+        [text]="'Adicionar Restrição'"
+        [icon]="'add'"
+        stylingMode="outlined"
+        type="normal"
+        (onClick)="goToNew()">
+      </dx-button>
+      <table mat-table [dataSource]="defineDataSource(dataSource)" class="w-100">
+
+        <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
+          <mat-header-cell *matHeaderCellDef> {{ column.header }}</mat-header-cell>
+          <mat-cell *matCellDef="let row" [innerHTML]="findColumnValue(row, column)"></mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef>
+            <button mat-button [disabled]="true">Ações</button>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <dx-button
+              style="border: none"
+              type="default"
+              stylingMode="outlined"
+              (onClick)="onEditClick(row)"
+              [icon]="'edit'">
+            </dx-button>
+            <dx-button
+              style="border: none"
+              type="danger"
+              stylingMode="outlined"
+              (onClick)="onDeleteClick(row)"
+              [icon]="'trash'">
+            </dx-button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </mat-card-content>
+  </mat-card>
+  </div>
+</div>

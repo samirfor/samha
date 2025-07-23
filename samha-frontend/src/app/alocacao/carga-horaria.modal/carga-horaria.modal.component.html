@@ -1,0 +1,72 @@
+<dx-popup [(visible)]="showPopup" [title]="'Carga Horária dos Professores'" (onHidden)="showPopupChange.emit(false)">
+  <dx-scroll-view height="95%">
+    <div *ngIf="cargaHoraria$ | async as cargaHoraria; else loading2">
+
+      <table class="carga-horaria-table">
+        <thead style="border-bottom: 1px solid #4caf50">
+        <td class="carga-horaria-table-header">Nome</td>
+        <td class="carga-horaria-table-header">Carga Horária em Horas</td>
+        </thead>
+        <tbody>
+        <tr *ngFor="let professor of cargaHoraria" class="carga-horaria-table-row" (click)="onRowClicked(professor)" [class.highlight]="selectedIndex == professor.id">
+          <td class="carga-horaria-table-cell">{{professor.nome}}</td>
+          <td class="carga-horaria-table-cell">{{professor.cargaHorariaCalculada}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </dx-scroll-view>
+
+  <dx-popup
+    height="500"
+    [(visible)]="showAlocacaoPopup"
+    title="{{selectedrow?.nome}}"
+    (onHiding)="showAlocacaoPopup = false">
+    <dx-scroll-view>
+      <div *ngIf="alocacoesProfessor$ | async as alocacoes; else loading2">
+        <table class="carga-horaria-table">
+          <thead style="border-bottom: 1px solid #4caf50">
+            <td class="carga-horaria-table-header">Disciplina</td>
+            <td class="carga-horaria-table-header">Turma</td>
+            <td class="carga-horaria-table-header">Sigla</td>
+            <td class="carga-horaria-table-header">Período</td>
+            <td class="carga-horaria-table-header">Curso</td>
+            <td class="carga-horaria-table-header">Qtd Aulas</td>
+            <td class="carga-horaria-table-header">C.H.</td>
+            <td class="carga-horaria-table-header">Completa</td>
+          </thead>
+          <tbody>
+            <tr *ngFor="let alocacao of alocacoes" class="carga-horaria-table-row">
+              <td class="carga-horaria-table-cell">{{alocacao.disciplina.nome}}</td>
+              <td class="carga-horaria-table-cell">{{alocacao.turma.nome}}</td>
+              <td class="carga-horaria-table-cell">{{alocacao.disciplina.sigla}}</td>
+              <td class="carga-horaria-table-cell">{{alocacao.disciplina.periodo}}</td>
+              <td class="carga-horaria-table-cell">{{alocacao.turma.matriz.curso.nome}}</td>
+              <td class="carga-horaria-table-cell">{{alocacao.disciplina.qtAulas}}</td>
+              <td class="carga-horaria-table-cell">{{alocacao.disciplina.cargaHoraria}}</td>
+              <td class="carga-horaria-table-cell">
+                <div style="width: 20px; height: 20px; background-color: white; border: 1px solid #ccc;" *ngIf="alocacao.completa">
+                  <div style="display: block; width: 100%; height: 100%; background-color: white; text-align: center;">
+                    <span style="color: #337ab7; font-weight: bold;">✓</span>
+                  </div>
+                </div>
+
+                <div style="width: 20px; height: 20px; background-color: white; border: 1px solid #ccc;" *ngIf="!alocacao.completa">
+                  <div style="display: none; width: 100%; height: 100%; background-color: white; text-align: center;">
+                    <span style="color: #337ab7; font-weight: bold;">✓</span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </dx-scroll-view>
+  </dx-popup>
+
+  <ng-template #loading2>
+    <div class="loading-spinner" style="height: 100% !important;">
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-template>
+</dx-popup>

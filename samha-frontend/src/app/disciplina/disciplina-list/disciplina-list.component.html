@@ -1,0 +1,62 @@
+<mat-toolbar class="sub-toolbar">
+  <div class="d-flex justify-content-end w-100">
+    <dx-button
+      (onClick)="goToLog()"
+      stylingMode="outlined"
+      type="normal"
+      icon="clock"
+      text="Log de Alterações">
+    </dx-button>
+  </div>
+</mat-toolbar>
+
+<div class="base-padding">
+  <mat-card class="mb-2">
+    <div class="d-inline-block w-100" style="height: 30px">
+      <mat-card-subtitle class="d-inline-block">
+        <span>Filtros</span>
+      </mat-card-subtitle>
+      <div class="float-end d-inline-block">
+        <dx-button
+          style="border: none"
+          (onClick)="showFiltro = !showFiltro"
+          [icon]="showFiltro ? 'chevronup' : 'chevrondown'"
+          height="30px"
+        ></dx-button>
+      </div>
+    </div>
+  <mat-card-content *ngIf="showFiltro">
+    <form [formGroup]="form">
+      <samha-autocomplete-field
+        [resource]="'curso'"
+        [label]="'Curso'"
+        [control]="cursoControl"
+        (onChange)="onCursoChange($event)"></samha-autocomplete-field>
+      <mat-form-field appearance="outline" class="d-block">
+        <mat-label>Matriz Curricular</mat-label>
+        <mat-select *ngIf="matriz$ | async as matrizes; else loading" formControlName="matriz" [compareWith]="compareFunction">
+          <mat-option *ngFor="let matriz of matrizes.listMap" [value]="matriz" (onSelectionChange)="onMatrizChanged($event)">{{matriz.nome}}</mat-option>
+        </mat-select>
+        <ng-template #loading>
+          <mat-select [disabled]="true"></mat-select>
+        </ng-template>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="d-block" *ngIf="showPeriodo">
+        <mat-label>Período</mat-label>
+        <input matInput type="number" formControlName="periodo" min="1" [max]="qtPeriodos" (change)="onFilterChange(false)">
+      </mat-form-field>
+    </form>
+    <dx-button
+      type="normal"
+      stylingMode="outlined"
+      class="w-100"
+      icon="clear"
+      (onClick)="clearFilters()"
+      text="Limpar"
+    >
+    </dx-button>
+  </mat-card-content>
+</mat-card>
+  <samha-table [resource]="'disciplina'" [columns]="disciplinaColumns" [toolbarHeader]="'Disciplinas'" [filterChange]="filterChange" (onSelectedRow)="onSelectedRow($event)"></samha-table>
+</div>

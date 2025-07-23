@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+
+
+    <changeSet id="1" author="breno">
+        <sql dbms="mysql">
+            INSERT INTO menu_papeis values ('1', '2');
+            INSERT INTO menu_papeis values ('2', '2');
+            INSERT INTO menu_papeis values ('3', '2');
+            INSERT INTO menu_papeis values ('4', '2');
+            INSERT INTO menu_papeis values ('5', '2');
+            INSERT INTO menu_papeis values ('6', '2');
+            INSERT INTO menu_papeis values ('7', '2');
+            INSERT INTO menu_papeis values ('8', '2');
+        </sql>
+    </changeSet>
+
+
+</databaseChangeLog>

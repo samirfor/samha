@@ -1,0 +1,37 @@
+<mat-toolbar color="primary" style="height: 45px">
+  <button (click)="onClick()" mat-icon-button *ngIf="isLogado()">
+    <mat-icon style="color: white">menu</mat-icon>
+  </button>
+  <button routerLink="/home" mat-button style="font-size: 22px;" [disabled]="!isLogado()"><mat-icon style="color: white">grid_on</mat-icon><span style="color: white; margin-left: 0.2em; margin-right: 0.2em">SAMHA</span></button>
+  <div class="d-flex justify-content-end w-100">
+    <button mat-icon-button (click)="onInfoClick()"><mat-icon>info</mat-icon></button>
+    <button mat-icon-button (click)="onExitClick()" *ngIf="isLogado()"><mat-icon>exit_to_app</mat-icon></button>
+    <button mat-icon-button (click)="onSignInClick()" *ngIf="!isLogado()"><mat-icon>person_pin</mat-icon></button>
+
+  </div>
+</mat-toolbar>
+
+<dx-popup [(visible)]="showInfo"
+          (close)="showInfo = false"
+          [title]="'Desenvolvido por'"
+          [hideOnOutsideClick]="true"
+          (onHiding)="showInfo = false">
+  <div class="d-flex w-100 flex-wrap justify-content-center mt-5">
+    <h3 class="w-100 text-center mb-1">Breno Luiz Paulino Leal</h3>
+    <h4 class="w-100 text-center"><mat-icon>school</mat-icon> Bacharel em Sistemas de Informação pelo IFES Campus Colatina</h4>
+    <div class="w-100 text-center">
+      <a style="color: inherit" href="http://mail.google.com/a/domain.com/mail?view=cm&to=dev.brenoleal@gmail.com" target="_blank" (mouseover)="onShowEmail()"><i class='far fa-envelope fa-2x'></i></a>&nbsp;
+      <a style="color: inherit" href="https://www.linkedin.com/in/breno-luiz-paulino-leal-000435188/" target="_blank"><i class='fab fa-linkedin fa-2x'></i></a>&nbsp;
+      <a style="color: inherit" href="https://github.com/brenolpl" target="_blank"><i class="fa-brands fa-github fa-2x"></i></a>
+    </div>
+    <div class="w-100 text-center fw-lighter" *ngIf="showEmail"><small>dev.brenoleal@gmail.com</small></div>
+  </div>
+  <div class="d-flex flex-wrap" style="position: absolute; width: 100%; bottom: 80px; padding-right: 10%">
+    <div class="">
+      <div class="w-100 ">Esta aplicação é a evolução de um sistema desktop desenvolvido por Chrysthian Moizes em 2018.</div>
+      <div class="w-100  mt-2">
+        <a style="color: inherit; text-decoration: none" href="https://github.com/ChrysthianMoizes/samha" target="_blank"><i class="fa-brands fa-github fa-2x"></i><span style="font-size: 20px"> SAMHA Desktop</span></a>
+      </div>
+    </div>
+  </div>
+</dx-popup>

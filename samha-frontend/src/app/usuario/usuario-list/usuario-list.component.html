@@ -1,0 +1,16 @@
+<mat-toolbar class="sub-toolbar">
+  <div class="d-flex justify-content-end w-100">
+    <dx-button
+      (onClick)="goToLog()"
+      stylingMode="outlined"
+      type="normal"
+      icon="clock"
+      text="Log de Alterações">
+    </dx-button>
+  </div>
+</mat-toolbar>
+<div class="base-padding">
+  <samha-table [resource]="'usuario'"
+               [columns]="usuarioColumns"
+               [toolbarHeader]="'Usuários'"></samha-table>
+</div>

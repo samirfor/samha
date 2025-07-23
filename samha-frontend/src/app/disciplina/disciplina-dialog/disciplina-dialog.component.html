@@ -1,0 +1,8 @@
+<h2 mat-dialog-title>Selecione</h2>
+<mat-dialog-content class="p-0 h-100">
+  <samha-disciplina-list (selectedRow)="onSelectedRow($event)"></samha-disciplina-list>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onClose()">Fechar</button>
+  <button mat-button class="sub-toolbar-button" (click)="onSave()" [disabled]="entityId == null"><mat-icon>save</mat-icon> Salvar</button>
+</mat-dialog-actions>

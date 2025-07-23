@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+
+    <changeSet id="1" author="breno.leal">
+        <createTable tableName="papel">
+            <column name="id" autoIncrement="true" type="bigint"><constraints nullable="false" primaryKey="true"></constraints></column>
+            <column name="nome" type="varchar(255)"><constraints nullable="false" unique="true" uniqueConstraintName="PAPEL_NOME"></constraints></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="breno.leal">
+        <createTable tableName="menu">
+            <column name="id" autoIncrement="true" type="bigint"><constraints nullable="false" primaryKey="true"></constraints></column>
+            <column name="nome" type="varchar(255)"><constraints nullable="false" uniqueConstraintName="MENU_NOME_UNIQUE"></constraints> </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="breno.leal">
+        <createTable tableName="menu_papeis">
+            <column name="menu_id" type="bigint"><constraints nullable="false"></constraints></column>
+            <column name="papeis_id" type="bigint"><constraints nullable="false"></constraints></column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="menu_papeis" baseColumnNames="menu_id"
+                                 constraintName="FK_MENU_MENU_PAPEIS"
+                                 referencedTableName="menu"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+
+        <addForeignKeyConstraint baseTableName="menu_papeis" baseColumnNames="papeis_id"
+                                 constraintName="FK_MENU_PAPEIS_PAPEL"
+                                 referencedTableName="papel"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+
+        <addPrimaryKey tableName="menu_papeis" columnNames="menu_id, papeis_id"></addPrimaryKey>
+    </changeSet>
+
+    <changeSet id="4" author="breno.leal">
+        <comment>Acrescenta coluna papel na tabela de usuário</comment>
+        <addColumn tableName="usuario">
+            <column name="papel_id" type="bigint"><constraints nullable="false"></constraints></column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="5" author="breno.leal">
+        <addForeignKeyConstraint baseTableName="usuario" baseColumnNames="papel_id" constraintName="FK_USUARIO_PAPEL"
+                                 referencedTableName="papel"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+    </changeSet>
+
+    <changeSet id="6" author="breno.leal">
+        <comment>Menus iniciais</comment>
+        <sql>
+            insert into menu values (1, 'Professores');
+            insert into menu values (2, 'Coordenadores');
+            insert into menu values (3, 'Alocações');
+            insert into menu values (4, 'Cursos');
+            insert into menu values (5, 'Disciplinas');
+            insert into menu values (6, 'Turmas');
+            insert into menu values (7, 'Ofertas');
+            insert into menu values (8, 'Relatórios');
+            insert into menu values (9, 'Cadastrar Usuários');
+        </sql>
+    </changeSet>
+
+    <changeSet id="7" author="breno.leal">
+        <comment>Papeis</comment>
+        <sql>
+            insert into papel values ('1', "COORDENADOR_ACADEMICO");
+            insert into papel values ('2', "COORDENADOR_CURSO");
+            insert into papel values ('3', "COORDENADOR_PEDAGOGICO");
+        </sql>
+    </changeSet>
+
+    <changeSet id="8" author="breno.leal">
+        <comment>Relação Papel -> Menu para papel ADMIN</comment>
+        <sql>
+            insert into menu_papeis (menu_id, papeis_id) values ('1', '1');
+            insert into menu_papeis (menu_id, papeis_id) values ('2', '1');
+            insert into menu_papeis (menu_id, papeis_id) values ('3', '1');
+            insert into menu_papeis (menu_id, papeis_id) values ('4', '1');
+            insert into menu_papeis (menu_id, papeis_id) values ('5', '1');
+            insert into menu_papeis (menu_id, papeis_id) values ('6', '1');
+            insert into menu_papeis (menu_id, papeis_id) values ('7', '1');
+            insert into menu_papeis (menu_id, papeis_id) values ('8', '1');
+            insert into menu_papeis (menu_id, papeis_id) values ('9', '1');
+        </sql>
+    </changeSet>
+
+    <changeSet id="9" author="breno.leal">
+        <comment>Insere usuário administrador do sistema</comment>
+        <insert tableName="usuario">
+            <column name="login" value="admin"></column>
+            <column name="senha" value="123"></column>
+            <column name="papel_id" value="1"></column>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

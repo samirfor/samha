@@ -1,0 +1,120 @@
+<mat-card>
+  <div class="container-fluid container">
+    <div class="row">
+      <div class="col-12 d-grid justify-content-center">
+        <mat-radio-group aria-label="Selecione uma opção" [formControl]="radioGroupControl" (change)="onRadioSelected()">
+          <mat-radio-button value="1" class="m-2" [checked]="true">Nenhum</mat-radio-button>
+          <mat-radio-button value="2" class="m-2">Eixo</mat-radio-button>
+          <mat-radio-button value="3" class="m-2">Curso</mat-radio-button>
+          <mat-radio-button value="4" class="m-2">Turma</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+    <div class="row justify-content-center" *ngIf="radioGroupControl.value == 2 || radioGroupControl.value == 3 || radioGroupControl.value == 4">
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" class="d-block">
+          <mat-label>Eixo</mat-label>
+          <mat-select [formControl]="eixoControl" *ngIf="eixos$ | async as eixos; else loading" [compareWith]="compareFunction" (selectionChange)="onEixoSelected($event)">
+            <mat-option *ngFor="let eixo of eixos" [value]="eixo">{{eixo.nome}}</mat-option>
+          </mat-select>
+          <ng-template #loading>
+            <mat-select [disabled]="true"></mat-select>
+          </ng-template>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-3" *ngIf="radioGroupControl.value == 3 || radioGroupControl.value == 4">
+        <mat-form-field appearance="outline" class="d-block">
+          <mat-label>Curso</mat-label>
+          <mat-select [formControl]="cursoControl" *ngIf="curso$ | async as cursos; else loadingcursos" [compareWith]="compareFunction" (selectionChange)="onCursoChange($event)">
+            <mat-option *ngFor="let curso of cursos.listMap" [value]="curso">{{curso.nome}}</mat-option>
+          </mat-select>
+          <ng-template #loadingcursos>
+            <mat-select [disabled]="true"></mat-select>
+          </ng-template>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-3" *ngIf="radioGroupControl.value == 4">
+        <mat-form-field appearance="outline" class="d-block">
+          <mat-label>Turma</mat-label>
+          <mat-select [formControl]="turmaControl" *ngIf="turma$ | async as turmas; else loadingturmas" [compareWith]="compareFunction" (selectionChange)="onAnoSemestreChange()">
+            <mat-option *ngFor="let turma of turmas.listMap" [value]="turma">{{turma.nome}}</mat-option>
+          </mat-select>
+          <ng-template #loadingturmas>
+            <mat-select [disabled]="true"></mat-select>
+          </ng-template>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row mt-2 justify-content-center">
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" class="d-block">
+          <mat-label>Ano</mat-label>
+          <input matInput type="number" [formControl]="anoControl" (change)="onAnoSemestreChange()">
+        </mat-form-field>
+      </div>
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" class="d-block">
+          <mat-label>Semestre</mat-label>
+          <input matInput type="number" [max]="2" [min]="1" [formControl]="semestreControl" (change)="onAnoSemestreChange()">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row" *ngIf="authenticated">
+      <div class="col-12">
+        <mat-checkbox [formControl]="enviarEmailControl">Enviar E-mail</mat-checkbox>
+      </div>
+    </div>
+    <div class="row mt-3 mb-4" *ngIf="enviarEmailControl.value && authenticated">
+      <div class="col-12 col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>
+            <mat-icon>lock</mat-icon>
+            Senha
+          </mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" [formControl]="senhaControl">
+          <button mat-icon-button matSuffix (mousedown)="hide = !hide" [attr.aria-label]="'Esconder/Mostrar'"
+                  [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-hint>Esta senha não será armazenada. O sistema utilizará seu e-mail cadastrado e a senha informada acima para fazer o envio do e-mail.</mat-hint>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12 d-grid justify-content-center" *ngIf="isGenerating">
+        <div class="row d-grid justify-content-center">
+          <small>Gerando, por favor não feche esta janela.</small>
+        </div>
+        <div class="row d-grid justify-content-center">
+          <div class="spinner-border text-success" role="status"></div>
+        </div>
+      </div>
+      <div class="col-12" *ngIf="!isGenerating">
+        <dx-button
+          type="success"
+          class="w-100"
+          icon="pdffile"
+          text="Gerar Relatório"
+          [disabled]="!anoControl.valid || !semestreControl.valid"
+          (onClick)="generatePdf()">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</mat-card>
+
+<div *ngIf="aulasTurma$ | async">
+  <samha-report-aula-grid
+    [entityData]="aulasTurma"
+    [ano]="anoControl.value"
+    [semestre]="semestreControl.value"
+  ></samha-report-aula-grid>
+</div>
+
+<samha-confirm-generation-popup
+  [(showPopup)]="showPopup"
+  [warnMessage]="'Não selecionar um curso pode fazer o processo levar alguns minutos, deseja continuar?'"
+  (onOptionChoosen)="onOptionChoosen($event)">
+</samha-confirm-generation-popup>

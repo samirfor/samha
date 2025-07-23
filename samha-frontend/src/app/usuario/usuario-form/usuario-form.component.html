@@ -1,0 +1,75 @@
+<mat-toolbar class="sub-toolbar">
+  <dx-button
+    style="border: none"
+    type="success"
+    stylingMode="outlined"
+    (onClick)="goBack()"
+    [icon]="'chevronprev'"
+  ></dx-button>
+  <div class="d-flex justify-content-end w-100">
+    <dx-button
+      icon="save"
+      type="success"
+      text="Salvar"
+      (onClick)="salvar()">
+    </dx-button>
+    <span class="m-1"></span>
+    <dx-button
+      type="danger"
+      stylingMode="outlined"
+      icon="trash"
+      text="Excluir"
+      [visible]="usuario?.id"
+      (onClick)="delete()"
+    ></dx-button>
+  </div>
+</mat-toolbar>
+
+<div class="base-padding">
+  <mat-card class="mat-elevation-z8">
+  <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Cadastrar Usuários</span></mat-toolbar>
+  <mat-card-content class="mt-5 card-width">
+    <form [formGroup]="form">
+      <mat-form-field appearance="outline" class="d-block">
+        <mat-label>Login</mat-label>
+        <input matInput formControlName="login">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="d-block">
+        <mat-label>Senha</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName="senha">
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Esconder/Mostrar'" [attr.aria-pressed]="hide">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-hint>A senha deve conter pelo menos 1 (um) caractére especial (!#$%...) uma letra minúscula, uma maiúscula e um número, sendo no mínimo 8 caracteres.</mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="standard" class="d-block">
+        <mat-label>Selecione o tipo de usuário</mat-label>
+        <mat-select formControlName="papel" required *ngIf="papeis$ | async as papeis; else loadingMenu;">
+          <mat-option *ngFor="let papel of papeis" [value]="papel.id">
+            {{papel.nome}}
+          </mat-option>
+        </mat-select>
+        <ng-template #loadingMenu>
+          <mat-select [disabled]="true"></mat-select>
+        </ng-template>
+      </mat-form-field>
+      <div class="pesquisar">
+        <mat-form-field appearance="standard" class="d-inline-block pesquisar-field">
+          <mat-label>Vincular à Servidor</mat-label>
+          <ng-container *ngIf="servidor$ | async as servidor; else notSet">
+            <mat-select [value]="setProfessorValue(servidor.id)" formControlName="servidor_id" (click)="openDialog()">
+              <mat-option [value]="servidor.id">{{servidor.nome}}</mat-option>
+            </mat-select>
+          </ng-container>
+          <ng-template #notSet>
+            <mat-select [disabled]="true" (click)="openDialog()"></mat-select>
+          </ng-template>
+        </mat-form-field>
+        <button type="button" class="search-button search-servidor" mat-button (click)="openDialog()">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+</div>

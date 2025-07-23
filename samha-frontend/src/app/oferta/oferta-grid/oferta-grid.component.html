@@ -1,0 +1,65 @@
+<table class="w-100">
+  <thead>
+    <tr style="line-height: 20px;">
+      <td class="turma-cell-header">Turma</td>
+      <td style="width: 7px"></td>
+      <td [colSpan]="getColspan()" class="turma-cell-content">{{turma?.nome}}</td>
+    </tr>
+    <tr style="height: 7px"></tr>
+    <tr style="line-height: 20px;">
+      <td class="invisible-cell"></td>
+      <td style="width: 7px;"></td>
+      <ng-container *ngIf="turno.toUpperCase() === 'MATUTINO'">
+        <td class="cell-title"><span>{{getLabel(labelsMatutino[0])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsMatutino[1])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsMatutino[2])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsMatutino[3])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsMatutino[4])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsMatutino[5])}}</span></td>
+      </ng-container>
+      <ng-container *ngIf="turno.toUpperCase() === 'VESPERTINO'">
+        <td class="cell-title"><span>{{getLabel(labelsVespertino[0])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsVespertino[1])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsVespertino[2])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsVespertino[3])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsVespertino[4])}}</span></td>
+        <ng-container *ngIf="turma.turno === 'VESPERTINO' || turma.turno === 'MATUTINO'">
+          <td class="cell-title"><span>{{getLabel(labelsVespertino[5])}}</span></td>
+        </ng-container>
+        <ng-container *ngIf="turma.turno === 'NOTURNO'">
+          <td class="cell-title"><span>{{getLabel(labelsNoturno[0])}}</span></td>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="turno.toUpperCase() === 'NOTURNO'">
+        <td class="cell-title"><span>{{getLabel(labelsNoturno[1])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsNoturno[2])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsNoturno[3])}}</span></td>
+        <td class="cell-title"><span>{{getLabel(labelsNoturno[4])}}</span></td>
+      </ng-container>
+    </tr>
+  </thead>
+  <tr *ngFor="let row of matriz; let i = index" style="line-height: 40px; overflow-y: clip">
+    <td class="cell-header">{{getDia(i)}}</td>
+    <td style="width: 7px;"></td>
+    <td *ngFor="let item of row; let j = index" tabindex="0" class="cell cell-border"
+        [class.highlighted]="highlightedRowIndex === i && highlightedColIndex === j"
+        (dragover)="onDragOver($event, i, j)"
+        (dragleave)="onDragLeave($event, i, j)"
+        (drop)="onItemDrop($event, i, j)"
+        (click)="onClick($event, i, j)">
+      <div class="horizontal-box" draggable="true" style="height: inherit; display: flex; flex-direction: row; align-content: center; justify-content: center"
+           [ngClass]="verificarAula(item)"
+           (dragstart)="onDragStart($event, i, j)"
+           (dragend)="onDragEnd($event)">
+        <div
+          *ngIf="item"
+          (click)="deleteAula(item)"
+          [ngClass]="verificarAula(item) === 'background-red' ? 'clear-item-inverted' : 'clear-item'">X</div>
+        <span style="text-overflow: ellipsis; white-space: nowrap; width: 90%"
+              *ngIf="item?.alocacao">
+          {{(item?.alocacao?.disciplina?.sigla || '') + ' - ' + getNomeEncurtadoProfessor(item?.alocacao?.professor1?.nome) + ' ' + getNomeEncurtadoProfessor(item?.alocacao?.professor2?.nome)}}
+        </span>
+      </div>
+    </td>
+  </tr>
+</table>

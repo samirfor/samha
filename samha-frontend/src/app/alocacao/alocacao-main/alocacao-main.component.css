@@ -1,0 +1,76 @@
+.highlight {
+  background: #a1ffa7; /* green */
+}
+
+.bloco1 {
+  border-right: 1px solid rgba(0, 0, 0, .2);
+  padding-right: 10px;
+}
+
+.mat-card-content {
+  vertical-align: top;
+}
+
+.base-block {
+  max-height: 790px;
+}
+
+.base-overflow {
+  overflow-x: scroll;
+  max-height: 450px;
+}
+
+.separator {
+  color: #4caf50;
+  background-color: #4caf50;
+  height: 10px;
+  border: 1px solid;
+  border-radius: 60px;
+  opacity: 1;
+}
+
+.new-button-border {
+  border: 0.5px solid green;
+  border-radius: 5px;
+}
+
+.delete-button-border {
+  border: 0.5px solid red;
+  border-radius: 5px;
+}
+
+.search-button-border {
+  border: 0.5px solid green;
+  border-radius: 5px;
+}
+
+.sub-toolbar-button {
+  background-color: #4caf50;
+  color: white;
+  margin: 2px;
+}
+
+.fim-tabela {
+  opacity: 0;
+}
+
+.mat-header-cell {
+  font-size: 9pt;
+}
+
+.mat-cell {
+  font-size: 10pt;
+}
+
+.mat-cell:first-of-type, mat-header-cell:first-of-type, mat-footer-cell:first-of-type {
+  padding: 0;
+}
+
+.mat-row {
+  min-height: 35px;
+}
+
+
+::ng-deep .dx-checkbox .dx-checkbox-container .dx-checkbox-icon {
+  opacity: 1;
+}

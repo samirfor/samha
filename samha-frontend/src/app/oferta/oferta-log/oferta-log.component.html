@@ -1,0 +1,15 @@
+<mat-toolbar class="sub-toolbar">
+  <div class="d-flex justify-content-start w-100">
+    <dx-button
+      style="border: none"
+      type="success"
+      stylingMode="outlined"
+      (onClick)="goBack()"
+      [icon]="'chevronprev'"
+    ></dx-button>
+  </div>
+</mat-toolbar>
+
+<div class="base-padding">
+  <samha-log [resource]="'oferta'" [columns]="ofertaLogColumns" [toolbarHeader]="'Ofertas'" [ativarToolbar]="false"></samha-log>
+</div>

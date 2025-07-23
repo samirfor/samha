@@ -1,0 +1,22 @@
+<mat-dialog-content class="mb-2">
+  Deseja realmente excluir este registro?
+</mat-dialog-content>
+<mat-dialog-actions class="d-flex justify-content-center">
+
+  <dx-button
+    icon="trash"
+    type="danger"
+    text="Confirmar"
+    stylingMode="outlined"
+    (onClick)="onSimClick()">
+  </dx-button>
+  <span class="m-1"></span>
+  <dx-button
+    type="normal"
+    stylingMode="outlined"
+    icon="clear"
+    text="Cancelar"
+    (onClick)="onNoClick()"
+  ></dx-button>
+</mat-dialog-actions>
+

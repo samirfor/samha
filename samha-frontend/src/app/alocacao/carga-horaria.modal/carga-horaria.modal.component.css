@@ -1,0 +1,22 @@
+.carga-horaria-table {
+  width: 100%;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.carga-horaria-table-header {
+  font-size: 13pt;
+  padding: 8px;
+}
+
+.carga-horaria-table-row {
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.carga-horaria-table-cell {
+  font-size: 10pt;
+  padding: 8px;
+}
+
+.highlight {
+  background: #a1ffa7;
+}

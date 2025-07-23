@@ -1,0 +1,49 @@
+<table class="w-100" *ngIf="alocacao;">
+  <thead>
+  <tr style="line-height: 25px;">
+    <td class="turma-cell-header">
+      <select [formControl]="selectionControl">
+        <option>1</option>
+        <option>2</option>
+      </select>
+    </td>
+    <td style="width: 7px"></td>
+    <td colspan="16" class="professor-cell-content">{{getNomeProfessor()}}</td>
+  </tr>
+  <tr style="height: 7px"></tr>
+  <tr>
+    <td class="invisible-cell"></td>
+    <td style="width: 7px;"></td>
+    <td class="cell-title">{{getLabel(labels[0])}}</td>
+    <td class="cell-title">{{getLabel(labels[1])}}</td>
+    <td class="cell-title">{{getLabel(labels[2])}}</td>
+    <td class="cell-title">{{getLabel(labels[3])}}</td>
+    <td class="cell-title">{{getLabel(labels[4])}}</td>
+    <td class="cell-title">{{getLabel(labels[5])}}</td>
+    <td class="cell-title">{{getLabel(labels[6])}}</td>
+    <td class="cell-title">{{getLabel(labels[7])}}</td>
+    <td class="cell-title">{{getLabel(labels[8])}}</td>
+    <td class="cell-title">{{getLabel(labels[9])}}</td>
+    <td class="cell-title">{{getLabel(labels[10])}}</td>
+    <td class="cell-title">{{getLabel(labels[12]) + '/' + getLabel(labels[11])}}</td>
+    <td class="cell-title">{{getLabel(labels[13])}}</td>
+    <td class="cell-title">{{getLabel(labels[14])}}</td>
+    <td class="cell-title">{{getLabel(labels[15])}}</td>
+    <td class="cell-title">{{getLabel(labels[16])}}</td>
+  </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngIf="aulas$ | async as aulasProfessor">
+      <tr *ngFor="let aulas of getMatrizAulasProfessor(aulasProfessor); let i = index" style="line-height: 40px; overflow-y: clip">
+        <td class="professor-cell-header">{{getDia(i)}}</td>
+        <td style="width: 7px;"></td>
+        <td *ngFor="let aula of aulas"
+            [ngClass]="verificarAula(aula)"
+            class="professor-cell cell-border"
+            style="white-space: nowrap">
+          {{aula.oferta?.turma?.nome}}
+        </td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>

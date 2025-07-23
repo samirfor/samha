@@ -1,0 +1,38 @@
+.login-box{
+  z-index: 100;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid #4caf50;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 450px;
+  margin: auto;
+}
+
+.icon-display {
+  z-index: 120;
+  color: #4caf50;
+  transform: scale(5);
+}
+
+.vertical-center {
+  min-height: 100vh;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+}
+
+p{
+  text-align: center;
+}
+
+.mat-button{
+  width: 100%;
+  color: white;
+  height: 50px;
+}
+

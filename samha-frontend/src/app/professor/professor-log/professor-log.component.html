@@ -1,0 +1,16 @@
+<mat-toolbar class="sub-toolbar">
+  <div class="d-flex justify-content-start w-100">
+    <dx-button
+      style="border: none"
+      type="success"
+      stylingMode="outlined"
+      (onClick)="goBack()"
+      [icon]="'chevronprev'"
+    ></dx-button>
+  </div>
+</mat-toolbar>
+
+<div class="base-padding">
+  <samha-log [resource]="'servidor'" [columns]="servidorLogColumns" [toolbarHeader]="'Servidor'" [ativarToolbar]="false"></samha-log>
+  <samha-log [resource]="'professor'" [columns]="professorLogColumns" [toolbarHeader]="'Professor'" [ativarToolbar]="false"></samha-log>
+</div>

@@ -1,0 +1,56 @@
+<mat-toolbar class="sub-toolbar">
+  <div class="d-flex justify-content-start w-100">
+    <dx-button
+      style="border: none"
+      type="success"
+      stylingMode="outlined"
+      (onClick)="goBack()"
+      [icon]="'chevronprev'"
+    ></dx-button>
+  </div>
+</mat-toolbar>
+
+<div class="base-padding">
+  <mat-card>
+    <div class="d-inline-block w-100" style="height: 30px">
+      <mat-card-subtitle class="d-inline-block">
+        <span>Legenda</span>
+      </mat-card-subtitle>
+      <div class="float-end d-inline-block">
+        <dx-button
+          style="border: none"
+          (onClick)="showLegenda = !showLegenda"
+          [icon]="showLegenda ? 'chevronup' : 'chevrondown'"
+          height="30px"
+        ></dx-button>
+      </div>
+    </div>
+    <div *ngIf="showLegenda">
+      <div class="container-fluid">
+      <div class="container">
+        <div class="row">
+          <div class="col-4">
+            <div class=" p-1">Dia 0: Segunda-Feira</div><br>
+            <div class=" p-1">Dia 1: Terça-Feira</div><br>
+            <div class=" p-1">Dia 2: Quarta-Feira</div><br>
+            <div class=" p-1">Dia 3: Quinta-Feira</div><br>
+            <div class="p-1">Dia 4: Sexta-feira</div><br>
+          </div>
+          <div class="col-4">
+            <div class=" p-1">Turno 0: Matutino</div><br>
+            <div class=" p-1">Turno 6: Vespertino</div><br>
+            <div class=" p-1">Turno 12: Noturno</div><br>
+          </div>
+          <div class="col-4">
+            <div class=" p-1">Aulas de 0 a 5: Matutinas</div><br>
+            <div class=" p-1">Aulas de 6 a 11: Vespertinas</div><br>
+            <div class=" p-1">Aulas de 12 a 15: Noturnas</div><br>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </mat-card>
+
+  <samha-log [resource]="'aula'" [columns]="aulaLogColumns" [toolbarHeader]="'Aulas'" [ativarToolbar]="false"></samha-log>
+</div>

@@ -1,0 +1,38 @@
+<mat-toolbar class="sub-toolbar d-flex justify-content-end w-100">
+  <dx-button
+    (onClick)="goToLog()"
+    stylingMode="outlined"
+    type="normal"
+    icon="clock"
+    text="Log de Alterações">
+  </dx-button>
+</mat-toolbar>
+
+<div class="base-padding">
+
+
+  <mat-card>
+    <dx-data-grid
+      id="gridContainer"
+      [dataSource]="labels"
+      keyExpr="id"
+      [allowColumnReordering]="true"
+      [showBorders]="false"
+      (onSaved)="save($event)"
+    >
+      <dxo-paging [enabled]="true"></dxo-paging>
+      <dxo-editing
+        mode="row"
+        [useIcons]="true"
+        [allowUpdating]="true"
+        [allowDeleting]="false"
+      >
+      </dxo-editing>
+
+      <dxi-column dataField="inicio" caption="Início" dataType="datetime" format="HH:mm"></dxi-column>
+      <dxi-column dataField="fim" caption="Fim" dataType="datetime" format="HH:mm"></dxi-column>
+      <dxi-column dataField="turno" caption="Turno" [format]="format" [allowEditing]="false"></dxi-column>
+      <dxi-column dataField="numero" caption="Aula" [allowEditing]="false"></dxi-column>
+    </dx-data-grid>
+  </mat-card>
+</div>

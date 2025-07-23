@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+
+
+    <changeSet id="1" author="breno">
+        <comment>Cria nova tabela para parametrização das labels</comment>
+        <createTable tableName="label">
+            <column name="id" type="bigint" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
+            <column name="nome" type="varchar(50)"> <constraints nullable="false" unique="true"/></column>
+            <column name="inicio" type="time"><constraints nullable="false"/></column>
+            <column name="fim" type="time"><constraints nullable="false"/></column>
+            <column name="numero" type="int" defaultValue="0"><constraints nullable="false"/></column>
+            <column name="turno" type="int"><constraints nullable="false"/></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="breno">
+        <comment>popula a tabela acima com valores default</comment>
+        <insert tableName="label">
+            <column name="nome" value="07:00 a 07:50"/>
+            <column name="inicio" value="07:00"/>
+            <column name="fim" value="07:50"/>
+            <column name="numero" value="0"/>
+            <column name="turno" value="0"/>
+        </insert>
+        <insert tableName="label">
+            <column name="nome" value="07:55 a 08:45"/>
+            <column name="inicio" value="07:55"/>
+            <column name="fim" value="08:45"/>
+            <column name="numero" value="1"/>
+            <column name="turno" value="0"/>
+        </insert>
+        <insert tableName="label">
+            <column name="nome" value="08:50 a 09:40"/>
+            <column name="inicio" value="08:50"/>
+            <column name="fim" value="09:40"/>
+            <column name="numero" value="2"/>
+            <column name="turno" value="0"/>
+        </insert>
+        <insert tableName="label">
+            <column name="nome" value="10:00 a 10:50"/>
+            <column name="inicio" value="10:00"/>
+            <column name="fim" value="10:50"/>
+            <column name="numero" value="3"/>
+            <column name="turno" value="0"/>
+        </insert>
+        <insert tableName="label">
+            <column name="nome" value="10:55 a 11:45"/>
+            <column name="inicio" value="10:55"/>
+            <column name="fim" value="11:45"/>
+            <column name="numero" value="4"/>
+            <column name="turno" value="0"/>
+        </insert>
+        <insert tableName="label">
+            <column name="nome" value="11:50 a 12:40"/>
+            <column name="inicio" value="11:50"/>
+            <column name="fim" value="12:40"/>
+            <column name="numero" value="5"/>
+            <column name="turno" value="0"/>
+        </insert>
+        <insert tableName="label">
+            <column name="nome" value="12:50 a 13:40"/>
+            <column name="inicio" value="12:50"/>
+            <column name="fim" value="13:40"/>
+            <column name="numero" value="6"/>
+            <column name="turno" value="1"/>
+        </insert>
+        <insert tableName="label">
+            <column name="nome" value="13:45 a 14:35"/>
+            <column name="inicio" value="13:45"/>
+            <column name="fim" value="14:35"/>
+            <column name="numero" value="7"/>
+            <column name="turno" value="1"/>
+        </insert>
+        <insert tableName="label">
+            <column name="nome" value="14:40 a 15:30"/>
+            <column name="inicio" value="14:40"/>
+            <column name="fim" value="15:30"/>
+            <column name="numero" value="8"/>
+            <column name="turno" value="1"/>
+        </insert>
+        <insert tableName="label">
+            <column name="nome" value="15:50 a 16:40"/>
+            <column name="inicio" value="15:50"/>
+            <column name="fim" value="16:40"/>
+            <column name="numero" value="9"/>
+            <column name="turno" value="1"/>
+        </insert>
+        <insert tableName="label">
+            <column name="nome" value="16:45 a 17:35"/>
+            <column name="inicio" value="16:45"/>
+            <column name="fim" value="17:35"/>
+            <column name="numero" value="10"/>
+            <column name="turno" value="1"/>
+        </insert>
+        <insert tableName="label">
+            <column name="nome" value="17:40 a 18:30"/>
+            <column name="inicio" value="17:40"/>
+            <column name="fim" value="18:30"/>
+            <column name="numero" value="11"/>
+            <column name="turno" value="1"/>
+        </insert>
+        <insert tableName="label">
+            <column name="nome" value="18:50 a 19:35"/>
+            <column name="inicio" value="18:50"/>
+            <column name="fim" value="19:35"/>
+            <column name="numero" value="12"/>
+            <column name="turno" value="2"/>
+        </insert>
+        <insert tableName="label">
+            <column name="nome" value="19:35 a 20:20"/>
+            <column name="inicio" value="19:35"/>
+            <column name="fim" value="20:20"/>
+            <column name="numero" value="13"/>
+            <column name="turno" value="2"/>
+        </insert>
+        <insert tableName="label">
+            <column name="nome" value="20:30 a 21:15"/>
+            <column name="inicio" value="20:30"/>
+            <column name="fim" value="21:15"/>
+            <column name="numero" value="14"/>
+            <column name="turno" value="2"/>
+        </insert>
+        <insert tableName="label">
+            <column name="nome" value="21:15 a 22:00"/>
+            <column name="inicio" value="21:15"/>
+            <column name="fim" value="22:00"/>
+            <column name="numero" value="15"/>
+            <column name="turno" value="2"/>
+        </insert>
+    </changeSet>
+    
+    <changeSet id="3" author="breno">
+        <insert tableName="menu">
+            <column name="id">13</column>
+            <column name="nome">Label</column>
+        </insert>
+    </changeSet>
+    
+    <changeSet id="4" author="breno">
+        <insert tableName="menu_papeis">
+            <column name="papeis_id">1</column>
+            <column name="menu_id">13</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="5" author="breno">
+        <insert tableName="label">
+            <column name="nome" value="18:05 a 18:50"/>
+            <column name="inicio" value="18:05"/>
+            <column name="fim" value="18:50"/>
+            <column name="numero" value="11"/>
+            <column name="turno" value="2"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

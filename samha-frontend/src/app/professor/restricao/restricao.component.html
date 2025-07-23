@@ -1,0 +1,101 @@
+<mat-toolbar class="sub-toolbar">
+  <dx-button
+    style="border: none"
+    type="success"
+    stylingMode="outlined"
+    (onClick)="goBack()"
+    [icon]="'chevronprev'"
+  ></dx-button>
+  <div class="d-flex justify-content-end w-100">
+    <dx-button
+      style="margin-right: 1em"
+      type="success"
+      (onClick)="salvar()"
+      icon="save"
+      text="Salvar"
+    ></dx-button>
+    <dx-button
+      type="danger"
+      stylingMode="outlined"
+      icon="trash"
+      text="Excluir"
+      [visible]="restricao?.id != undefined"
+      (onClick)="delete()"
+    ></dx-button>
+  </div>
+</mat-toolbar>
+
+<div class="base-padding">
+  <mat-card class="mat-elevation-z8 m-auto mb-5">
+  <mat-card-title>
+    <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Cadastrar Restrição</span></mat-toolbar>
+  </mat-card-title>
+  <mat-card-content class="mt-5 card-width">
+    <form [formGroup]="form">
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nome</mat-label>
+        <input type="text" matInput formControlName="nome">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Turno</mat-label>
+        <mat-select formControlName="turno" [compareWith]="compareFunction">
+          <mat-option [value]="'Matutino'">Matutino</mat-option>
+          <mat-option [value]="'Vespertino'">Vespertino</mat-option>
+          <mat-option [value]="'Noturno'">Noturno</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Dia</mat-label>
+        <mat-select formControlName="dia">
+          <mat-option [value]="0">Segunda-feira</mat-option>
+          <mat-option [value]="1">Terça-feira</mat-option>
+          <mat-option [value]="2">Quarta-feira</mat-option>
+          <mat-option [value]="3">Quinta-feira</mat-option>
+          <mat-option [value]="4">Sexta-feira</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Prioridade</mat-label>
+        <mat-select formControlName="prioridade" [compareWith]="compareFunction">
+          <mat-option [value]="'Baixa'">Baixa</mat-option>
+          <mat-option [value]="'Média'">Média</mat-option>
+          <mat-option [value]="'Alta'">Alta</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Descrição</mat-label>
+        <textarea matInput formControlName="descricao"></textarea>
+      </mat-form-field>
+
+    </form>
+    <div>
+      <span class="example-list-section">
+        <mat-checkbox class="example-margin" required
+                      [checked]="allComplete"
+                      [color]="aula.color"
+                      [indeterminate]="someComplete()"
+                      (change)="setAll($event.checked)">
+          {{aula.name}}
+        </mat-checkbox>
+      </span>
+      <span class="example-list-section">
+        <ul style="list-style: none">
+          <li *ngFor="let aulaItem of aula.aulaItems">
+            <mat-checkbox [(ngModel)]="aulaItem.completed"
+                          [color]="aulaItem.color"
+                          (ngModelChange)="updateAllComplete()"
+                          (change)="updateEntity(aulaItem)">
+              {{aulaItem.name}}
+            </mat-checkbox>
+          </li>
+        </ul>
+      </span>
+    </div>
+  </mat-card-content>
+</mat-card>
+</div>

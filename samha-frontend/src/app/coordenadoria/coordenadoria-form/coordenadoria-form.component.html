@@ -1,0 +1,53 @@
+<mat-toolbar class="sub-toolbar">
+  <dx-button
+    style="border: none"
+    type="success"
+    stylingMode="outlined"
+    (onClick)="goBack()"
+    [icon]="'chevronprev'"
+  ></dx-button>
+  <div class="d-flex justify-content-end w-100">
+    <dx-button
+      icon="save"
+      type="success"
+      text="Salvar"
+      (onClick)="salvar()">
+    </dx-button>
+    <span class="m-1"></span>
+    <dx-button
+      type="danger"
+      stylingMode="outlined"
+      icon="trash"
+      text="Excluir"
+      [visible]="coord?.id"
+      (onClick)="delete()"
+    ></dx-button>
+  </div>
+</mat-toolbar>
+
+<div class="base-padding">
+  <mat-card class="mat-elevation-z8">
+  <mat-card-title>
+    <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Cadastrar Coordenadoria</span></mat-toolbar>
+  </mat-card-title>
+
+  <mat-card-content class="mt-5">
+    <form [formGroup]="form">
+      <mat-form-field appearance="outline" class="d-block">
+        <mat-label>Nome</mat-label>
+        <input matInput type="text" formControlName="nome">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="d-block">
+        <mat-label>Eixo</mat-label>
+        <mat-select formControlName="eixo" *ngIf="eixos$ | async as eixos; else loading" [compareWith]="compareFunction">
+          <mat-option *ngFor="let eixo of eixos" [value]="eixo">{{eixo.nome}}</mat-option>
+        </mat-select>
+        <ng-template #loading>
+          <mat-select [disabled]="true"></mat-select>
+        </ng-template>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+</mat-card>
+</div>

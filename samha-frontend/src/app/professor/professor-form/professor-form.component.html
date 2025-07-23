@@ -1,0 +1,70 @@
+<mat-toolbar class="sub-toolbar">
+  <dx-button
+    style="border: none"
+    type="success"
+    stylingMode="outlined"
+    (onClick)="goBack()"
+    [icon]="'chevronprev'"
+  ></dx-button>
+  <div class="d-flex w-100 align-items-end justify-content-end align-content-end">
+    <dx-button
+      type="success"
+      (onClick)="salvar()"
+      icon="save"
+      text="Salvar"
+    ></dx-button>
+    <span class="m-1"></span>
+    <dx-button
+      type="danger"
+      stylingMode="outlined"
+      icon="trash"
+      text="Excluir"
+      [visible]="professor?.id"
+      (onClick)="delete()"
+    ></dx-button>
+  </div>
+</mat-toolbar>
+
+<div class="base-padding">
+  <mat-card class="mat-elevation-z8">
+  <mat-card-title class="fw-lighter">
+    <mat-toolbar class="toolbar-border"><span style="color: #4caf50;">Listagem de Professores</span></mat-toolbar>
+  </mat-card-title>
+  <mat-card-content class="mt-5 card-width">
+    <form [formGroup]="form">
+      <mat-form-field appearance="outline" class="d-block">
+        <mat-label>Nome</mat-label>
+        <input matInput formControlName="nome">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="d-block">
+        <mat-label>E-mail</mat-label>
+        <input type="email" matInput formControlName="email">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="d-block">
+        <mat-label>Matrícula</mat-label>
+        <input type="text" matInput formControlName="matricula">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="d-block">
+        <mat-label>Carga Horária</mat-label>
+        <input type="number" matInput formControlName="carga_horaria">
+        <mat-hint *ngIf="form.get('carga_horaria').invalid && form.get('carga_horaria').touched">Mínimo 1 e máximo 99</mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="d-block">
+        <mat-label>Coordenadoria</mat-label>
+        <mat-select formControlName="coordenadoria" *ngIf="coordenadoria$ | async as coordenadorias; else loadingCoord;">
+          <mat-option *ngFor="let coord of coordenadorias" [value]="coord.id">
+            {{coord.nome}}
+          </mat-option>
+        </mat-select>
+        <ng-template #loadingCoord>
+          <mat-select [disabled]="true"></mat-select>
+        </ng-template>
+      </mat-form-field>
+      <mat-checkbox formControlName="ativo">Ativo</mat-checkbox>
+    </form>
+  </mat-card-content>
+</mat-card>
+</div>
+<ng-container *ngIf="showRestrictions">
+    <samha-restricao-list [professorId]="professor.id"></samha-restricao-list>
+</ng-container>

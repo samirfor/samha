@@ -1,0 +1,26 @@
+<mat-dialog-content class="p-0">
+  <samha-table class="w-100"
+               [disableNew]="true"
+               [hideActions]="true"
+               [columns]="data.columns"
+               [resource]="data.resource"
+               [toolbarHeader]="data.toolbarHeader"
+               (onSelectedRow)="setEntityId($event)"></samha-table>
+</mat-dialog-content>
+<mat-dialog-actions class="justify-content-end">
+  <dx-button
+    type="success"
+    icon="save"
+    text="Salvar"
+    (onClick)="salvar()"
+  ></dx-button>
+  <span class="m-1"></span>
+  <dx-button
+    type="normal"
+    stylingMode="outlined"
+    icon="clear"
+    text="Cancelar"
+    (onClick)="onNoClick()"
+  ></dx-button>
+</mat-dialog-actions>
+

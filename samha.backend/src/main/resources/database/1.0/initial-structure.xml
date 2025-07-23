@@ -1,0 +1,141 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="1" author="breno.leal">
+        <createTable tableName="alocacao">
+            <column name="id" autoIncrement="true" type="bigint"><constraints primaryKey="true" nullable="false"></constraints></column>
+            <column name="ano" type="int"><constraints nullable="false"></constraints></column>
+            <column name="semestre" type="int"><constraints nullable="false"></constraints></column>
+            <column name="disciplina_id" type="bigint"><constraints nullable="false"></constraints> </column>
+            <column name="professor1_id" type="bigint"><constraints nullable="false"></constraints></column>
+            <column name="professor2_id" type="bigint" defaultValue="null"></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="breno.leal">
+        <createTable tableName="aula">
+            <column name="id" autoIncrement="true" type="bigint"><constraints primaryKey="true" nullable="false"></constraints></column>
+            <column name="dia" type="int"><constraints nullable="false"></constraints></column>
+            <column name="numero" type="int"><constraints nullable="false"></constraints></column>
+            <column name="turno" type="int"><constraints nullable="false"></constraints> </column>
+            <column name="alocacao_id" type="bigint"><constraints nullable="false"></constraints></column>
+            <column name="oferta_id" type="bigint"><constraints nullable="false"></constraints></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="breno.leal">
+        <createTable tableName="coordenadoria">
+            <column name="id" autoIncrement="true" type="bigint"><constraints nullable="false" primaryKey="true"></constraints></column>
+            <column name="nome" type="varchar(255)"><constraints nullable="false"></constraints></column>
+            <column name="eixo_id" type="bigint"><constraints nullable="false"></constraints></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="breno.leal">
+        <createTable tableName="curso">
+            <column name="id" autoIncrement="true" type="bigint"><constraints nullable="false" primaryKey="true"></constraints></column>
+            <column name="nivel" type="varchar(255)"><constraints nullable="false"></constraints></column>
+            <column name="nome" type="varchar(255)"><constraints nullable="false"></constraints></column>
+            <column name="qt_periodos" type="int"><constraints nullable="false"></constraints></column>
+            <column name="professor_id" type="bigint" defaultValue="null"></column>
+            <column name="coordenadoria_id" type="bigint"><constraints nullable="false"></constraints></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="6" author="breno.leal">
+        <createTable tableName="disciplina">
+            <column name="id" autoIncrement="true" type="bigint"><constraints nullable="false" primaryKey="true"></constraints></column>
+            <column name="carga_horaria" type="int"><constraints nullable="false"></constraints></column>
+            <column name="nome" type="varchar(255)"><constraints nullable="false"></constraints></column>
+            <column name="periodo" type="int"><constraints nullable="false"></constraints></column>
+            <column name="qt_aulas" type="int"><constraints nullable="false"></constraints></column>
+            <column name="tipo" type="varchar(255)"><constraints nullable="false"></constraints></column>
+            <column name="matriz_id" type="bigint"><constraints nullable="false"></constraints></column>
+            <column name="sigla" type="varchar(255)"><constraints nullable="false"></constraints></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="7" author="breno.leal">
+        <createTable tableName="eixo">
+            <column name="id" autoIncrement="true" type="bigint"><constraints nullable="false" primaryKey="true"></constraints></column>
+            <column name="nome" type="varchar(255)"><constraints nullable="false"></constraints></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="8" author="breno.leal">
+        <createTable tableName="matriz_curricular">
+            <column name="id" autoIncrement="true" type="bigint"><constraints nullable="false" primaryKey="true"></constraints></column>
+            <column name="ano" type="int"><constraints nullable="false"></constraints></column>
+            <column name="nome" type="varchar(255)"><constraints nullable="false"></constraints></column>
+            <column name="semestre" type="int"><constraints nullable="false"></constraints></column>
+            <column name="curso_id" type="bigint"><constraints nullable="false"></constraints></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="9" author="breno.leal">
+        <createTable tableName="oferta">
+            <column name="id" autoIncrement="true" type="bigint"><constraints nullable="false" primaryKey="true"></constraints></column>
+            <column name="ano" type="int"><constraints nullable="false"></constraints></column>
+            <column name="intervalo_minimo" type="int"><constraints nullable="false"></constraints></column>
+            <column name="semestre" type="int"><constraints nullable="false"></constraints></column>
+            <column name="tempo_maximo_trabalho" type="int"><constraints nullable="false"></constraints></column>
+            <column name="turma_id" type="bigint"><constraints nullable="false"></constraints></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="10" author="breno.leal">
+        <createTable tableName="professor">
+            <column name="carga_horaria" type="double" defaultValue="null"></column>
+            <column name="professor_id" type="bigint"><constraints nullable="false" primaryKey="true"></constraints> </column>
+            <column name="coordenadoria_id" type="bigint"><constraints nullable="false"></constraints> </column>
+            <column name="ativo" type="bool"><constraints nullable="false"></constraints></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="11" author="breno.leal">
+        <createTable tableName="restricao_professor">
+            <column name="id" autoIncrement="true" type="bigint"><constraints nullable="false" primaryKey="true"></constraints></column>
+            <column name="aula1" type="bool"><constraints nullable="false"></constraints></column>
+            <column name="aula2" type="bool"><constraints nullable="false"></constraints></column>
+            <column name="aula3" type="bool"><constraints nullable="false"></constraints></column>
+            <column name="aula4" type="bool"><constraints nullable="false"></constraints></column>
+            <column name="aula5" type="bool"><constraints nullable="false"></constraints></column>
+            <column name="aula6" type="bool"><constraints nullable="false"></constraints></column>
+            <column name="descricao" type="varchar(255)"><constraints nullable="false"></constraints></column>
+            <column name="dia" type="int"><constraints nullable="false"></constraints></column>
+            <column name="nome" type="varchar(255)"><constraints nullable="false"></constraints></column>
+            <column name="prioridade" type="varchar(255)"><constraints nullable="false"></constraints></column>
+            <column name="turno" type="varchar(255)"><constraints nullable="false"></constraints></column>
+            <column name="professor_id" type="bigint"><constraints nullable="false"></constraints></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="12" author="breno.leal">
+        <createTable tableName="servidor">
+            <column name="id" autoIncrement="true" type="bigint"><constraints nullable="false" primaryKey="true"></constraints></column>
+            <column name="matricula" type="varchar(255)"><constraints nullable="false"></constraints></column>
+            <column name="nome" type="varchar(255)"><constraints nullable="false"></constraints></column>
+            <column name="email" type="varchar(100)" defaultValue="null"></column>
+            <column name="usuario_id" type="bigint" defaultValue="null"></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="13" author="breno.leal">
+        <createTable tableName="turma">
+            <column name="id" autoIncrement="true" type="bigint"><constraints nullable="false" primaryKey="true"></constraints></column>
+            <column name="ano" type="int"><constraints nullable="false"></constraints></column>
+            <column name="nome" type="varchar(255)"><constraints nullable="false"></constraints></column>
+            <column name="semestre" type="int"><constraints nullable="false"></constraints></column>
+            <column name="turno" type="varchar(255)"><constraints nullable="false"></constraints></column>
+            <column name="matriz_curricular_id" type="bigint"><constraints nullable="false"></constraints></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="14" author="breno.leal">
+        <createTable tableName="usuario">
+            <column name="id" autoIncrement="true" type="bigint"><constraints nullable="false" primaryKey="true"></constraints></column>
+            <column name="login" type="varchar(255)"><constraints nullable="false"></constraints></column>
+            <column name="senha" type="varchar(255)"><constraints nullable="false"></constraints></column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,21 @@
+<samha-toolbar (sideBarClicked)="onSideBarClicked()" [opened]="opened"></samha-toolbar>
+<mat-sidenav-container *ngIf="showMenu$ | async">
+  <ng-template #loading>
+    <div class="loading-spinner">
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-template>
+  <mat-sidenav mode="side" [(opened)]="opened" *ngIf="menus$ | async as menusSource; else loading">
+    <ng-container *ngFor="let menu of getMenuOrdenado(menusSource)">
+      <div class="botao-menu">
+        <button (click)="onMenuClick(menu.id)" mat-button class="menu-height">
+          <mat-icon>{{loadMatIcon(menu.id)}}</mat-icon>
+          {{menu.nome}}
+        </button>
+      </div>
+    </ng-container>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

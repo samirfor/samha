@@ -1,0 +1,218 @@
+<mat-toolbar class="sub-toolbar">
+  <div class="d-flex justify-content-end w-100">
+    <dx-button
+      type="success"
+      icon="save"
+      text="Salvar"
+      (onClick)="new()"
+    ></dx-button>
+    <span class="m-1"></span>
+    <dx-button
+      type="danger"
+      stylingMode="outlined"
+      icon="trash"
+      text="Excluir"
+      (onClick)="delete()"
+    ></dx-button>
+    <span class="m-1"></span>
+    <dx-button
+      text="Carga Horária"
+      (onClick)="onCargaHorariaClicked()"
+      type="normal"
+      stylingMode="outlined"
+      icon="toolbox"
+    ></dx-button>
+    <span class="m-1"></span>
+    <dx-button
+      (onClick)="goToLog()"
+      stylingMode="outlined"
+      type="normal"
+      icon="clock"
+      text="Log de Alterações">
+    </dx-button>
+  </div>
+</mat-toolbar>
+
+<div class="base-padding">
+  <mat-card class="mb-5 col-md-12 col-sm-6 base-block" style="overflow: hidden">
+    <!--Bloco 1-->
+    <mat-card-content class="w-25 d-inline-block">
+      <mat-card-subtitle>Disciplina</mat-card-subtitle>
+      <form [formGroup]="disciplinaForm">
+        <samha-autocomplete-field
+          [resource]="'curso'"
+          [label]="'Curso'"
+          [control]="cursoControl"
+          (onChange)="onCursoChange($event)"
+          (loaded)="onLoaded($event)"></samha-autocomplete-field>
+
+        <mat-form-field appearance="outline" class="d-block">
+          <mat-label>Matriz Curricular</mat-label>
+          <mat-select *ngIf="matriz$ | async as matrizes; else mLoading" [formControl]="matrizControl"
+                      [compareWith]="compareFunction" (selectionChange)="onMatrizChanged()">
+            <mat-option *ngFor="let matriz of matrizes.listMap" [value]="matriz">{{matriz.nome}}</mat-option>
+          </mat-select>
+          <ng-template #mLoading>
+            <mat-select [disabled]="true"></mat-select>
+          </ng-template>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="d-block" *ngIf="showPeriodo">
+          <mat-label *ngIf="cursoControl.value?.semestral">Período</mat-label>
+          <mat-label *ngIf="!cursoControl.value?.semestral">Ano</mat-label>
+          <input matInput type="number" formControlName="periodo" min="1" [max]="qtPeriodos"
+                 (change)="onPeriodoChange()">
+        </mat-form-field>
+      </form>
+      <hr class="separator" style="margin-top: 11px!important;">
+      <div *ngIf="disciplinaDataSource$ | async as dataSource; else loading" id="div1"
+           class="base-block base-overflow hide-scrollbar">
+        <table mat-table [dataSource]="defineDataSource(dataSource)" class="w-100">
+
+          <ng-container *ngFor="let column of disciplinaColumns" [matColumnDef]="column.columnDef">
+
+            <mat-header-cell *matHeaderCellDef>{{column.header}}</mat-header-cell>
+            <mat-cell *matCellDef="let row" [innerHTML]="findColumnValue(row, column.columnDef)"></mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="disciplinaDisplayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: disciplinaDisplayedColumns"
+                   [ngClass]="{'highlight': selectedDisciplinaRowIndex == row.id}"
+                   (click)="highlightDisciplina(row)"></mat-row>
+        </table>
+        <hr class="fim-tabela">
+      </div>
+    </mat-card-content>
+    <!--Fim do bloco 1-->
+
+    <div class="bloco1 d-inline-block" style="height: 100vh;"></div>
+
+    <!--Bloco 2-->
+    <mat-card-content class="w-25 d-inline-block" style="margin-left: 10px">
+      <mat-card-subtitle>Professor</mat-card-subtitle>
+      <div style="height: 217px;">
+        <form [formGroup]="professorForm">
+          <samha-autocomplete-field
+            [resource]="'eixo'"
+            [label]="'Eixo'"
+            [control]="eixoControl"
+            (onChange)="onEixoChange($event)"
+            (loaded)="onEixoLoaded($event)"
+            (clearButtonClicked)="onSearchChange()">
+          </samha-autocomplete-field>
+
+          <mat-form-field appearance="outline" class="d-block">
+            <mat-label>Pesquisar</mat-label>
+            <input matInput type="text" placeholder="Pesquisar" (keyup)="onSearchChange()" formControlName="search">
+            <button *ngIf="professorForm.get('search').value" matSuffix mat-icon-button aria-label="Clear" (click)="onClearButtonClicked()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <mat-radio-group aria-label="Selecione uma opção" formControlName="eixo" (change)="onRadioChange($event)">
+            <mat-radio-button value="1" class="m-2">Eixo</mat-radio-button>
+            <mat-radio-button value="2" [checked]="true">Todos</mat-radio-button>
+          </mat-radio-group>
+        </form>
+
+      </div>
+      <hr class="separator">
+      <div *ngIf="professor$ | async as profSource; else loading" class="base-block base-overflow hide-scrollbar" id="div2">
+
+        <table mat-table [dataSource]="defineDataSource(profSource)" class="w-100">
+
+          <ng-container *ngFor="let column of professorColumns" [matColumnDef]="column.columnDef">
+
+            <mat-header-cell *matHeaderCellDef>{{column.header}}</mat-header-cell>
+            <mat-cell *matCellDef="let row" [innerHTML]="findColumnValue(row, column.columnDef)"></mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="disciplinaDisplayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: disciplinaDisplayedColumns"
+                   [ngClass]="{'highlight': highlightProfessorRow(row)}"
+                   (click)="highlightProfessor(row)"></mat-row>
+        </table>
+        <hr class="mt-1 fim-tabela">
+      </div>
+    </mat-card-content>
+    <!--Fim do bloco 2-->
+
+    <div class="bloco1 d-inline-block" style="height: 100vh;"></div>
+
+    <mat-card-content class="d-inline-block"
+                      style="width: 43%; margin-left: 10px">
+      <mat-card-subtitle>Alocações</mat-card-subtitle>
+      <div style="height: 217px;">
+        <form [formGroup]="alocacaoForm">
+          <mat-form-field appearance="outline" class="d-block">
+            <mat-label>Ano</mat-label>
+            <input matInput type="number" formControlName="ano" (change)="onFilterAlocacaoChange()">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="d-block">
+            <mat-label>Semestre</mat-label>
+            <input matInput type="number" [min]="1" [max]="2" formControlName="semestre"
+                   (change)="onFilterAlocacaoChange()">
+          </mat-form-field>
+        </form>
+      </div>
+      <hr class="separator">
+      <dx-scroll-view>
+        <div *ngIf="alocacao$ | async as dataSource; else loading" class="base-block base-overflow hide-scrollbar">
+        <table mat-table [dataSource]="defineDataSource(dataSource)" class="w-100" id="div3">
+
+          <ng-container *ngFor="let column of alocacaoColumns" [matColumnDef]="column.columnDef">
+
+            <mat-header-cell *matHeaderCellDef>{{column.header}}</mat-header-cell>
+            <mat-cell *matCellDef="let row" [innerHTML]="findColumnValue(row, column.columnDef)"></mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="encurtadoProfessor1">
+            <mat-header-cell *matHeaderCellDef>Professor 1</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.encurtadoProfessor1}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="encurtadoProfessor2">
+            <mat-header-cell *matHeaderCellDef>Professor 2</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.encurtadoProfessor2}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="completa">
+            <mat-header-cell *matHeaderCellDef>Completa</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              <div style="width: 20px; height: 20px; background-color: white; border: 1px solid #ccc;" *ngIf="row.completa">
+                <div style="display: block; width: 100%; height: 100%; background-color: white; text-align: center;">
+                  <span style="color: #337ab7; font-weight: bold;">✓</span>
+                </div>
+              </div>
+
+              <div style="width: 20px; height: 20px; background-color: white; border: 1px solid #ccc;" *ngIf="!row.completa">
+                <div style="display: none; width: 100%; height: 100%; background-color: white; text-align: center;">
+                  <span style="color: #337ab7; font-weight: bold;">✓</span>
+                </div>
+              </div>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="alocacaoDisplayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: alocacaoDisplayedColumns"
+                   [ngClass]="{'highlight': selectedAlocacaoRowIndex == row.id}"
+                   (click)="highlightAlocacao(row)"></mat-row>
+        </table>
+        <hr class="mt-1 fim-tabela">
+      </div>
+      </dx-scroll-view>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<samha-carga-horaria-modal [(showPopup)]="showPopup"
+                           [ano]="alocacaoForm.get('ano').value"
+                           [semestre]="alocacaoForm.get('semestre').value"
+                           [cargaHoraria$]="cargaHoraria$"></samha-carga-horaria-modal>
+
+
+<ng-template #loading>
+  <div class="loading-spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

@@ -1,0 +1,58 @@
+<mat-card class="mt-2" *ngFor="let entity of entityData" [style]="entity.aulas.length <= 0 ? 'display: none; overflow-x: scroll' : 'overflow-x: scroll'">
+  <table class="w-100" style="border: 1px solid #dadada">
+    <thead>
+    <tr>
+      <th colspan="8" style="border-right: 1px solid #4caf50">
+        <img src="assets/images/logo_ifes.png" alt="Logo do IFES Campus Colatina" width="350" height="150">
+      </th>
+      <th colspan="10" style="text-align: center">
+        <h2>{{entity.nome}}</h2>
+        <h3>{{entity?.coordenadoria?.nome}}</h3>
+        <h5>{{entity.aulas.length + ' aulas semanais'}}</h5><h5 style="margin-left: 1em">{{ano + '/' + semestre}}</h5>
+
+      </th>
+    </tr>
+    <tr style="line-height: 25px;">
+      <th style="width: 7px"></th>
+      <th></th>
+      <th colspan="6" class="professor-cell-content" style="border-right: 1px solid #4caf50">Matutino</th>
+      <th colspan="6" class="professor-cell-content" style="border-right: 1px solid #4caf50">Vespertino</th>
+      <th colspan="4" class="professor-cell-content">Noturno</th>
+    </tr>
+    <tr style="height: 7px"></tr>
+    <tr>
+      <th style="width: 7px;"></th>
+      <th class="invisible-cell"></th>
+      <td class="cell-title">{{getLabel(labels[0])}}</td>
+      <td class="cell-title">{{getLabel(labels[1])}}</td>
+      <td class="cell-title">{{getLabel(labels[2])}}</td>
+      <td class="cell-title">{{getLabel(labels[3])}}</td>
+      <td class="cell-title">{{getLabel(labels[4])}}</td>
+      <td class="cell-title">{{getLabel(labels[5])}}</td>
+      <td class="cell-title">{{getLabel(labels[6])}}</td>
+      <td class="cell-title">{{getLabel(labels[7])}}</td>
+      <td class="cell-title">{{getLabel(labels[8])}}</td>
+      <td class="cell-title">{{getLabel(labels[9])}}</td>
+      <td class="cell-title">{{getLabel(labels[10])}}</td>
+      <td class="cell-title">{{getLabel(labels[12]) + '/' + getLabel(labels[11])}}</td>
+      <td class="cell-title">{{getLabel(labels[13])}}</td>
+      <td class="cell-title">{{getLabel(labels[14])}}</td>
+      <td class="cell-title">{{getLabel(labels[15])}}</td>
+      <td class="cell-title">{{getLabel(labels[16])}}</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let aulas of getMatrizAulasProfessor(entity.aulas); let i = index" style="line-height: 60px; overflow-y: clip;">
+      <td class="professor-cell-header">{{getDia(i)}}</td>
+      <td style="width: 7px;"></td>
+      <td *ngFor="let aula of aulas"
+          class="professor-cell cell-border"
+          style="white-space: nowrap;">
+        <p style="margin-top: -20px">{{aula.nomeTurma}}</p>
+        <p>{{aula?.siglaDisciplina}}</p>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <small style="font-weight: normal" *ngFor="let disciplina of disciplinas">{{disciplina.sigla + ': ' + disciplina.nome + '   |   ' }}</small>
+</mat-card>

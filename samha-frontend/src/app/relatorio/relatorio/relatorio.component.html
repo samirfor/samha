@@ -1,0 +1,22 @@
+<div class="base-padding">
+  <dx-tabs
+    [dataSource]="tabs"
+    [selectedIndex]="selectedTab"
+    (onItemClick)="selectTab($event)">
+  </dx-tabs>
+
+  <div *ngIf="selectedTab == 1">
+    <samha-relatorio-professor [senhaControl]="senhaControl" [enviarEmailControl]="enviarEmailControl" [authenticated]="authenticated" [anoControl]="anoControl" [semestreControl]="semestreControl"></samha-relatorio-professor>
+  </div>
+  <div *ngIf="selectedTab == 0">
+    <samha-relatorio-turma [senhaControl]="senhaControl" [enviarEmailControl]="enviarEmailControl" [authenticated]="authenticated" [anoControl]="anoControl" [semestreControl]="semestreControl"></samha-relatorio-turma>
+  </div>
+
+  <div *ngIf="selectedTab == 2">
+    <samha-relatorio-disciplina [senhaControl]="senhaControl" [enviarEmailControl]="enviarEmailControl" [authenticated]="authenticated" [anoControl]="anoControl" [semestreControl]="semestreControl"></samha-relatorio-disciplina>
+  </div>
+
+
+</div>
+
+

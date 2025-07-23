@@ -1,0 +1,166 @@
+.horizontal-box {
+  color: rgba(0, 0, 0, 0.87);
+  text-align: center;
+  box-sizing: border-box;
+  cursor: move;
+  background: white;
+  font-size: 9pt;
+  transition: 0.3s;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: .035em;
+}
+
+.cell-header {
+  width: 30px;
+  text-align: center;
+  background-color: #eeeded;
+  font-size: 9pt;
+}
+
+.cell {
+  width: 80px;
+  max-width: 80px;
+  text-align: center;
+}
+
+.cell-border {
+  border: 1px solid #4caf50;
+}
+
+.cell-title {
+  border-top: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  text-align: center;
+  width: 80px;
+  font-size: 9pt;
+  font-weight: normal;
+}
+
+.relatorio-border {
+  border-bottom: 1px solid black;
+}
+
+.invisible-cell {
+  width: 30px;
+  height: 20px;
+}
+
+.turma-cell-header {
+  width: 30px;
+  font-size: 11pt;
+  text-align: center;
+  vertical-align: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.turma-cell-content {
+  text-align: center;
+  font-size: 11pt;
+  background-color: #eeeded;
+}
+
+.dragging {
+  transform: scale(0.98);
+}
+
+.horizontal-box:hover {
+  cursor: move;
+  background-color: rgba(26,125,233, 0.3);
+}
+
+.horizontal-box::placeholder {
+  background-color: red;
+}
+
+.horizontal-box.dragging {
+  box-shadow: rgb(26,125,233);
+  opacity: 1;
+  height: 40px!important;
+  border: 1px solid #ddd;
+}
+
+.highlighted {
+  background-color: rgb(26,125,233);
+  box-sizing: border-box;
+  box-shadow: rgb(26,125,233);
+}
+
+
+.professor-cell-content {
+  text-align: center;
+  font-size: 10pt;
+  background-color: #eeeded;
+}
+
+.professor-cell-header {
+  width: 20px;
+  padding: 2px;
+  text-align: center;
+  background-color: #eeeded;
+}
+
+.professor-cell {
+  width: 40px;
+  max-width: 40px;
+  font-size: 8pt;
+  max-height: 40px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+.background-red {
+  background-color: #C7312C;
+  color: #FFFFFF;
+}
+
+.background-yellow {
+  background-color: #FF9966;
+  color: #000;
+}
+
+.background-blue {
+  background-color: #5DD4FD;
+  color: #040404;
+}
+
+.background-white {
+  background-color: white;
+}
+
+.clear-item {
+  display: flex;
+  width: 10%;
+  border-radius: 2px;
+  font-size: 10px;
+  cursor: pointer;
+  z-index: 15;
+  color: #C7312C;
+  justify-content: center;
+  align-content: center;
+}
+
+.clear-item-inverted {
+  display: flex;
+  width: 10%;
+  border-radius: 2px;
+  font-size: 10px;
+  cursor: pointer;
+  z-index: 15;
+  color: #FFF;
+  justify-content: center;
+  align-content: center;
+}
+
+.clear-item-inverted:hover {
+  background-color: #C7312C;
+  color: #FFF;
+}
+
+.clear-item:hover {
+  background-color: #C7312C;
+  color: #FFF;
+}

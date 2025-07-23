@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+
+    <changeSet id="15" author="breno.leal">
+        <comment>Set Chaves estrangeiras de alocacao</comment>
+
+        <addForeignKeyConstraint baseTableName="alocacao" baseColumnNames="professor1_id"
+                                 constraintName="FK_ALOCACAO_PROFESSOR_1"
+                                 referencedTableName="professor"
+                                 referencedColumnNames="professor_id"></addForeignKeyConstraint>
+
+        <addForeignKeyConstraint baseTableName="alocacao" baseColumnNames="professor2_id"
+                                 constraintName="FK_ALOCACAO_PROFESSOR_2"
+                                 referencedTableName="professor"
+                                 referencedColumnNames="professor_id"></addForeignKeyConstraint>
+
+        <addForeignKeyConstraint baseTableName="alocacao" baseColumnNames="disciplina_id"
+                                 constraintName="FK_ALOCACAO_DISCIPLINA"
+                                 referencedTableName="disciplina"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+    </changeSet>
+
+    <changeSet id="16" author="breno.leal">
+        <comment>Set Chaves estrangeiras de aula</comment>
+        <addForeignKeyConstraint baseTableName="aula" baseColumnNames="oferta_id" constraintName="FK_AULA_OFERTA"
+                                 referencedTableName="oferta"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+
+        <addForeignKeyConstraint baseTableName="aula" baseColumnNames="alocacao_id" constraintName="FK_AULA_ALOCACAO"
+                                 referencedTableName="alocacao"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+    </changeSet>
+
+    <changeSet id="17" author="breno.leal">
+        <comment>Set Chaves estrangeiras de coordenadoria</comment>
+        <addForeignKeyConstraint baseTableName="coordenadoria" baseColumnNames="eixo_id"
+                                 constraintName="FK_COORDENADORIA_EIXO"
+                                 referencedTableName="eixo"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+
+        <addUniqueConstraint tableName="coordenadoria" columnNames="nome"></addUniqueConstraint>
+    </changeSet>
+
+    <changeSet id="18" author="breno.leal">
+        <comment>Set Chaves estrangeiras curso</comment>
+        <addUniqueConstraint tableName="curso" columnNames="nome"></addUniqueConstraint>
+
+        <addForeignKeyConstraint baseTableName="curso" baseColumnNames="professor_id"
+                                 constraintName="FK_CURSO_PROFESSOR"
+                                 referencedTableName="professor"
+                                 referencedColumnNames="professor_id"></addForeignKeyConstraint>
+    </changeSet>
+
+    <changeSet id="19" author="breno.leal">
+        <comment>Set Chave estrangeira disciplina</comment>
+        <addForeignKeyConstraint baseTableName="disciplina" baseColumnNames="matriz_id"
+                                 constraintName="FK_DISCIPLINA_MATRIZ"
+                                 referencedTableName="matriz_curricular"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+    </changeSet>
+
+    <changeSet id="20" author="breno.leal">
+        <comment>Set Nome Unique eixo</comment>
+        <addUniqueConstraint tableName="eixo" columnNames="nome"></addUniqueConstraint>
+    </changeSet>
+
+    <changeSet id="21" author="breno.leal">
+        <comment>Set Chave estrangeira matriz</comment>
+        <addForeignKeyConstraint baseTableName="matriz_curricular" baseColumnNames="curso_id"
+                                 constraintName="FK_MATRIZ_CURSO"
+                                 referencedTableName="curso"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+    </changeSet>
+
+    <changeSet id="22" author="breno.leal">
+        <comment>Set Chave estrangeira oferta</comment>
+        <addForeignKeyConstraint baseTableName="oferta" baseColumnNames="turma_id" constraintName="FK_OFERTA_TURMA"
+                                 referencedTableName="turma"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+    </changeSet>
+
+    <changeSet id="23" author="breno.leal">
+        <comment>Set chave estrangeira professor</comment>
+        <addForeignKeyConstraint baseTableName="professor" baseColumnNames="coordenadoria_id"
+                                 constraintName="FK_PROFESSOR_COORDENADORIA"
+                                 referencedTableName="coordenadoria"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+    </changeSet>
+
+    <changeSet id="24" author="breno.leal">
+        <comment>Set Chave estrangeira restricao professor</comment>
+        <addForeignKeyConstraint baseTableName="restricao_professor" baseColumnNames="professor_id"
+                                 constraintName="FK_RESTRICAOPROFESSOR_PROFESSOR"
+                                 referencedTableName="professor"
+                                 referencedColumnNames="professor_id"></addForeignKeyConstraint>
+    </changeSet>
+
+    <changeSet id="25" author="breno.leal">
+        <comment>Set chave estrangeira turma</comment>
+        <addForeignKeyConstraint baseTableName="turma" baseColumnNames="matriz_curricular_id"
+                                 constraintName="FK_TURMA_MATRIZ"
+                                 referencedTableName="matriz_curricular"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+    </changeSet>
+
+    <changeSet id="26" author="breno.leal">
+        <comment>Set Unique usuario</comment>
+        <addUniqueConstraint tableName="usuario" columnNames="login"></addUniqueConstraint>
+    </changeSet>
+
+    <changeSet id="27" author="breno.leal">
+        <comment>Set chave estrangeira servidor</comment>
+        <addForeignKeyConstraint baseTableName="servidor" baseColumnNames="usuario_id"
+                                 constraintName="FK_SERVIDOR_USUARIO"
+                                 referencedTableName="usuario"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+    </changeSet>
+</databaseChangeLog>

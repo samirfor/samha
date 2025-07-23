@@ -1,0 +1,75 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.custom-dialog-container{
+  height: 80%;
+  width: 75%;
+}
+
+.loading-spinner{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  height: 100vh;
+}
+
+.sub-toolbar{
+  height: 50px;
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 0 5px 0 black;
+}
+
+.mat-toolbar {
+  overflow: hidden;
+}
+
+.base-padding{
+  padding: 15px;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.mat-card-subtitle {
+  color: #4caf50;
+}
+
+.sub-toolbar-button{
+  background-color: #4caf50;
+  color: white;
+  margin: 2px;
+}
+
+.search-button {
+  color: rgb(2,125,233);
+}
+
+.toolbar-border{
+  background: none;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #e7e7e7;
+  width: 100%;
+}
+
+.cancelar-button {
+  background-color: rgb(244 67 54);
+  color: white;
+}
+
+.dx-button {
+  border-radius: 0;
+}
