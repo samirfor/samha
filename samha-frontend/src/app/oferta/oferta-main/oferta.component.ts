@@ -91,15 +91,13 @@ export class OfertaComponent implements OnInit, OnDestroy {
     private localStorageService: LocalStorageService
   ) {
     this.formGroup = formBuilder.group({
-      turno: ['MATUTINO'],
+      curso: [''],
       ano: [],
-      semestre: []
-      // ,      periodo: [1]
+      semestre: [],
+      turma: [''],
+      turno: ['MATUTINO']
     });
     this.formPeriodo = formBuilder.group({
-      // turno: ['MATUTINO'],
-      // ano: [],
-      // semestre: [],
      periodo: [1]
     });
 
@@ -111,12 +109,31 @@ export class OfertaComponent implements OnInit, OnDestroy {
         this.permissaoMudarVisibilidade = resultado;
       }, error => this.notification.handleError(error)
     )
+    const cursoSelecionadoRaw = localStorage.getItem('curso');
     const anoSelecionado = localStorage.getItem('ano');
     const semestreSelecionado = localStorage.getItem('semestre');
-    if (anoSelecionado) this.formGroup.get('ano').setValue(anoSelecionado);
-    else this.formGroup.get('ano').setValue(new Date().getUTCFullYear());
-    if (semestreSelecionado) this.formGroup.get('semestre').setValue(semestreSelecionado);
-    else this.formGroup.get('semestre').setValue(new Date().getMonth() < 6 ? 1 : 2);
+    
+    if (cursoSelecionadoRaw && cursoSelecionadoRaw.trim() !== '') {
+      const cursoSelecionado = JSON.parse(cursoSelecionadoRaw);
+      this.cursoControl.setValue(cursoSelecionado);
+      this.onCursoChange(cursoSelecionado); // dispara a atualização das turmas
+    }
+
+    if (anoSelecionado && anoSelecionado !== 'undefined') {
+      this.formGroup.get('ano').setValue(anoSelecionado);
+    }
+    else {
+      this.formGroup.get('ano').setValue(new Date().getUTCFullYear());
+      localStorage.setItem('ano', this.formGroup.get('ano').value);
+    }
+
+    if (semestreSelecionado && semestreSelecionado !== 'undefined') {
+      this.formGroup.get('semestre').setValue(semestreSelecionado);
+    }
+    else {
+      this.formGroup.get('semestre').setValue(new Date().getMonth() < 6 ? 1 : 2);
+      localStorage.setItem('semestre', this.formGroup.get('semestre').value);
+    }
 
     this.anoCurrentValue = this.formGroup.get('ano').value;
     this.semestreCurrentValue = this.formGroup.get('semestre').value;
@@ -132,16 +149,24 @@ export class OfertaComponent implements OnInit, OnDestroy {
 
   onCursoChange(_) {
     this.qtPeriodos = this.cursoControl.value.qtPeriodos;
+    localStorage.setItem('curso', JSON.stringify(this.cursoControl.value));
     this.loadTurmas();
   }
 
   onCursoLoaded($event: any[]) {
-    if ($event.length > 0) {
-      this.cursoControl.setValue($event[0]);
-      this.qtPeriodos = this.cursoControl.value.qtPeriodos;
-      this.loadTurmas();
-    } else {
-      this.notification.error('Não há cursos cadastrados!');
+    const cursoSelecionadoRaw = localStorage.getItem('curso');
+    if (cursoSelecionadoRaw && cursoSelecionadoRaw.trim() !== '') {
+      const cursoSelecionado = JSON.parse(cursoSelecionadoRaw);
+      this.cursoControl.setValue(cursoSelecionado);
+    }
+    else{
+      if ($event.length > 0) {
+        this.cursoControl.setValue($event[0]);
+        this.qtPeriodos = this.cursoControl.value.qtPeriodos;
+        this.loadTurmas();
+      } else {
+        this.notification.error('Não há cursos cadastrados!');
+      }
     }
   }
 
@@ -152,7 +177,6 @@ export class OfertaComponent implements OnInit, OnDestroy {
     const filterValue = nome.toLowerCase();
     return this.list.filter(entity => entity.nome.toLowerCase().includes(filterValue));
   }
-
 
   private loadTurmas() {
     if (this.ofertaChanged) {
@@ -536,8 +560,15 @@ export class OfertaComponent implements OnInit, OnDestroy {
   }
   getAulas = () => [...this.aulasMatutinas, ...this.aulasVespertinas, ...this.aulasNoturnas];
   openDialog = () => this.dialog.open(AlteracaoDialogComponent);
-  onTurmaSelectOpened = () => this.turmaCurrentValue = this.turmaControl.value;
-  onCursoSelectionOpened = () => this.cursoCurrentValue = this.cursoControl.value;
+  
+  onTurmaSelectOpened = () => {
+    this.turmaCurrentValue = this.turmaControl.value;
+  }
+  
+  onCursoSelectionOpened = () => {
+    this.cursoCurrentValue = this.cursoControl.value;
+    localStorage.setItem('curso', JSON.stringify(this.cursoControl.value));
+  }
 
   private executeAulasRestricaoQuery(aulas: any[]) {
     let request = {

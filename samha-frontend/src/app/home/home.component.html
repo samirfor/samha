@@ -1,47 +1,59 @@
-<mat-card class="w-75 m-auto mt-5 h-75">
+<!-- <mat-card class="w-75 m-auto mt-5 h-75">
   <mat-card-header>
     <h2 matCardTitle>Bem Vindo</h2>
   </mat-card-header>
   <mat-card-content class="p-3 ">
     Selecione um item no Menu ao lado para iniciar.
   </mat-card-content>
-</mat-card>
+</mat-card> -->
 
-<!-- <mat-card class="w-75 m-auto mt-5 h-75">
+<mat-card class="w-75 m-auto mt-5 h-75">
   <mat-card-header>
-    <h2 matCardTitle>Bem Vindo</h2>
+    <h2 matCardTitle>Bem Vindo ao SAMHA!</h2>
   </mat-card-header>
 
   <mat-card-content class="p-3 text-center">
+
+    <p>Selecione o curso, ano e semestre que deseja trabalhar.</p>
+
     <form [formGroup]="formGroup">
-      <p>Selecione os dados abaixo. Eles serão utilizados com padrão em todas as interfaces do SAMHA.</p>
 
       <div class="d-flex justify-content-center align-items-start gap-3 mt-4">
-        
-        <mat-form-field appearance="outline" style="width: 500px;">
-          <mat-label>Escolha um Curso</mat-label>
-          <mat-select>
-            <mat-option value="opcao1">Opção 1</mat-option>
-            <mat-option value="opcao2">Opção 2</mat-option>
-            <mat-option value="opcao3">Opção 3</mat-option>
-          </mat-select>
-        </mat-form-field>
 
+        <div style="flex: 1; margin-right: 16px;">
+          <!-- Curso -->
+          <samha-autocomplete-field
+            [resource]="'curso'"
+            [label]="'Curso'"
+            [control]="cursoControl"
+            (onChange)="onCursoChange($event)"
+            (loaded)="onCursoLoaded($event)"
+            (onOpened)="onCursoSelectionOpened()"
+            >
+          </samha-autocomplete-field>
+        </div>
+
+        <!-- Ano -->
         <mat-form-field appearance="outline" style="width: 150px;">
           <mat-label>Ano</mat-label>
-          <input matInput type="number" formControlName="ano" #anoInput>
+          <input matInput type="number" formControlName="ano" (change)="onAnoChange($event.target.value)" #anoInput>
         </mat-form-field>
 
+        <!-- Semestre -->
         <mat-form-field appearance="outline" style="width: 150px;">
           <mat-label>Semestre</mat-label>
-          <input matInput type="number" formControlName="semestre" [min]="1" [max]="2" #semestreInput>
+          <input matInput type="number" [min]="1" [max]="2" formControlName="semestre" (change)="onSemestreChange($event.target.value)"#semestreInput>
         </mat-form-field>
-        
       </div>
+
+      <div class="d-flex justify-content-left">
+        <mat-hint class="text-danger" >
+              O curso, ano e semestre podem ser alterados nas interfaces que oferecerem estes campos.
+        </mat-hint>
+      </div>
+
     </form>
   </mat-card-content>
 
-  <mat-card-content class="p-3">
-    Selecione um item no Menu ao lado para iniciar.
-  </mat-card-content>
-</mat-card> -->
+</mat-card>
+    

@@ -77,6 +77,34 @@ export class AlocacaoMainComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const cursoSelecionadoRaw = localStorage.getItem('curso');
+    const anoSelecionado = localStorage.getItem('ano');
+    const semestreSelecionado = localStorage.getItem('semestre');
+    
+    if (cursoSelecionadoRaw && cursoSelecionadoRaw.trim() !== '') {
+      const cursoSelecionado = JSON.parse(cursoSelecionadoRaw);
+      console.log("ngOnInit: cursoSelecionado", cursoSelecionado);
+      this.cursoControl.setValue(cursoSelecionado);
+      this.onCursoChange(cursoSelecionado);
+    }
+
+    if (anoSelecionado && anoSelecionado !== 'undefined') {
+      this.alocacaoForm.get('ano').setValue(anoSelecionado);
+    }
+    else {
+      this.alocacaoForm.get('ano').setValue(new Date().getUTCFullYear());
+      localStorage.setItem('ano', this.alocacaoForm.get('ano').value);
+    }
+
+    if (semestreSelecionado && semestreSelecionado !== 'undefined') {
+      this.alocacaoForm.get('semestre').setValue(semestreSelecionado);
+    }
+    else {
+      this.alocacaoForm.get('semestre').setValue(new Date().getMonth() < 6 ? 1 : 2);
+      localStorage.setItem('semestre', this.alocacaoForm.get('semestre').value);
+    }
+
+
     this.disciplinaDisplayedColumns.push('nome');
     this.setAlocacaoDisplayedColumns();
   }
@@ -111,6 +139,7 @@ export class AlocacaoMainComponent implements OnInit {
   }
 
   onCursoChange($event: any) {
+    localStorage.setItem('curso', JSON.stringify(this.cursoControl.value));
     this.disciplinaForm.get('periodo').setValue('1');
     this.qtPeriodos = this.cursoControl.value.qtPeriodos;
     this.loadMatrizes(this.cursoControl.value.id);
@@ -138,7 +167,14 @@ export class AlocacaoMainComponent implements OnInit {
   }
 
   onLoaded($event: any[]) {
-    this.cursoControl.setValue($event[0]);
+    const cursoSelecionadoRaw = localStorage.getItem('curso');
+    if (cursoSelecionadoRaw && cursoSelecionadoRaw.trim() !== '') {
+      const cursoSelecionado = JSON.parse(cursoSelecionadoRaw);
+      this.cursoControl.setValue(cursoSelecionado);
+    }
+    else{
+      this.cursoControl.setValue($event[0]);
+    }
     this.qtPeriodos = this.cursoControl.value.qtPeriodos;
     this.loadMatrizes(this.cursoControl.value.id);
   }

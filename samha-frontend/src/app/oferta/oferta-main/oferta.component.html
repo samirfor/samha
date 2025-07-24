@@ -48,58 +48,67 @@
 
     <mat-card-content *ngIf="filterOpened" [@verticalInOut] class="mt-2">
       <form [formGroup]="formGroup">
-        <samha-autocomplete-field
-          [resource]="'curso'"
-          [label]="'Curso'"
-          [control]="cursoControl"
-          (onChange)="onCursoChange($event)"
-          (loaded)="onCursoLoaded($event)"
-          (onOpened)="onCursoSelectionOpened()">
-        </samha-autocomplete-field>
 
-        <mat-form-field
-          class="d-block"
-          appearance="outline"
-          [ngClass]="oferta?.id ? '' : 'mb-3'"
-          *ngIf="turmaControl.value?.id">
-          <mat-label>Turma</mat-label>
-          <input type="text" matInput [formControl]="turmaControl" [matAutocomplete]="auto">
-          <mat-autocomplete
-            (optionSelected)="onTurmaChange()"
-            (opened)="onTurmaSelectOpened()"
-            autoActiveFirstOption #auto="matAutocomplete"
-            [displayWith]="displayFn">
-            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-              {{option.nome}}
-            </mat-option>
-          </mat-autocomplete>
-          <mat-hint class="text-danger" *ngIf="!oferta?.id" >
-            Esta turma não possui uma oferta para o ano/semestre selecionado. Você precisará clicar no botão + na listagem de alocações para criar uma nova oferta!
-          </mat-hint>
-        </mat-form-field>
+        <div style="display: flex; width: 100%; align-items: center;">
+          <!-- Curso preenche o espaço restante -->
+          <div style="flex: 1; margin-right: 16px;">
+            <samha-autocomplete-field
+              [resource]="'curso'"
+              [label]="'Curso'"
+              [control]="cursoControl"
+              (onChange)="onCursoChange($event)"
+              (loaded)="onCursoLoaded($event)"
+              (onOpened)="onCursoSelectionOpened()">
+            </samha-autocomplete-field>
+          </div>
 
-
-        <mat-form-field appearance="outline" class="d-block" *ngIf="turmaControl.value?.id">
-          <mat-label>Turno</mat-label>
-          <mat-select formControlName="turno" [compareWith]="compareFunction" (selectionChange)="onTurnoChange()">
-            <mat-option [value]="'Matutino'">Matutino</mat-option>
-            <mat-option [value]="'Vespertino'">Vespertino</mat-option>
-            <mat-option [value]="'Noturno'">Noturno</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <div class="d-block">
-          <mat-form-field appearance="outline" class="d-inline-block w-75">
+          <!-- Ano -->
+          <mat-form-field appearance="outline" style="width: 170px; margin-right: 16px;">
             <mat-label>Ano</mat-label>
             <input matInput type="number" formControlName="ano" (change)="onAnoChange($event.target.value)" #anoInput>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="d-inline-block w-25">
+          <!-- Semestre -->
+          <mat-form-field appearance="outline" style="width: 170px;">
             <mat-label>Semestre</mat-label>
             <input matInput type="number" [min]="1" [max]="2" formControlName="semestre"
-                   (change)="onSemestreChange($event.target.value)" #semestreInput>
+                  (change)="onSemestreChange($event.target.value)" #semestreInput>
           </mat-form-field>
         </div>
+
+        <div style="display: flex; width: 100%; align-items: flex-start; gap: 16px;" *ngIf="turmaControl.value?.id">
+          <!-- Campo Turma ocupa o espaço restante -->
+          <mat-form-field
+            appearance="outline"
+            style="flex: 1;"
+            [ngClass]="oferta?.id ? '' : 'mb-3'">
+            <mat-label>Turma</mat-label>
+            <input type="text" matInput [formControl]="turmaControl" [matAutocomplete]="auto">
+            <mat-autocomplete
+              (optionSelected)="onTurmaChange()"
+              (opened)="onTurmaSelectOpened()"
+              autoActiveFirstOption #auto="matAutocomplete"
+              [displayWith]="displayFn">
+              <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                {{option.nome}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-hint class="text-danger" *ngIf="!oferta?.id">
+              Esta turma não possui uma oferta para o ano/semestre selecionado. Você precisará clicar no botão + na listagem de alocações para criar uma nova oferta!
+            </mat-hint>
+          </mat-form-field>
+
+          <!-- Campo Turno -->
+          <mat-form-field appearance="outline" style="width: 230px;">
+            <mat-label>Turno</mat-label>
+            <mat-select formControlName="turno" [compareWith]="compareFunction" (selectionChange)="onTurnoChange()">
+              <mat-option [value]="'Matutino'">Matutino</mat-option>
+              <mat-option [value]="'Vespertino'">Vespertino</mat-option>
+              <mat-option [value]="'Noturno'">Noturno</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
       </form>
     </mat-card-content>
   </mat-card>
