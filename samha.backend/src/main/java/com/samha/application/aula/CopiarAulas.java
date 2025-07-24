@@ -1,21 +1,13 @@
 package com.samha.application.aula;
 
 import com.samha.commons.UseCase;
-import com.samha.domain.Alocacao;
 import com.samha.domain.Aula;
 import com.samha.domain.Aula_;
 import com.samha.domain.Oferta;
 import com.samha.domain.Oferta_;
 import com.samha.persistence.generics.IGenericRepository;
 
-import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CopiarAulas extends UseCase<Aula> {
@@ -24,9 +16,6 @@ public class CopiarAulas extends UseCase<Aula> {
     private int ano;
     private int semestre;
     private int ofertaIdDestino;
-
-    // @PersistenceContext
-    // private EntityManager entityManager;
 
     @Inject
     private IGenericRepository genericRepository;
@@ -50,9 +39,9 @@ public class CopiarAulas extends UseCase<Aula> {
 
     private void excluiAulasSegundoSemestre()throws Exception{
         List <Aula> aulas = genericRepository.find(Aula.class, 
-         q -> q.where(
-                    q.equal(q.get(Aula_.oferta), ofertaIdDestino)
-                    )
+            q -> q.where(
+                q.equal(q.get(Aula_.oferta), ofertaIdDestino)
+            )
         );
         
         if(aulas.isEmpty()){
@@ -66,17 +55,17 @@ public class CopiarAulas extends UseCase<Aula> {
 
     private void insereAulasSegundoSemestre()throws Exception{
         Oferta ofertaOrigem = genericRepository.findSingle(Oferta.class, 
-         q -> q.where(
-                    q.equal(q.get( Oferta_.turma), turmaId),
-                    q.equal(q.get(Oferta_.semestre), semestre), 
-                    q.equal(q.get(Oferta_.ano), ano)
-                    )
+            q -> q.where(
+                q.equal(q.get( Oferta_.turma), turmaId),
+                q.equal(q.get(Oferta_.semestre), semestre), 
+                q.equal(q.get(Oferta_.ano), ano)
+            )
         );
 
         Oferta ofertaDestinio = genericRepository.findSingle(Oferta.class, 
-         q -> q.where(
-                    q.equal(q.get(Oferta_.id), ofertaIdDestino)
-                    )
+            q -> q.where(
+                q.equal(q.get(Oferta_.id), ofertaIdDestino)
+            )
         );
 
         if(ofertaOrigem == null){
@@ -84,9 +73,9 @@ public class CopiarAulas extends UseCase<Aula> {
         }
 
         List <Aula> aulas = genericRepository.find(Aula.class, 
-         q -> q.where(
-                    q.equal(q.get(Aula_.oferta), ofertaOrigem.getId())
-                    )
+            q -> q.where(
+                q.equal(q.get(Aula_.oferta), ofertaOrigem.getId())
+            )
         );
 
         aulas.forEach(aula ->{
