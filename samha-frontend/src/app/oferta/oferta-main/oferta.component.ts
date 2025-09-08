@@ -14,7 +14,6 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 import {HttpEvent, HttpEventType} from "@angular/common/http";
 import {error} from "protractor";
 import {LocalStorageService} from "../../shared/service/local-storage.service";
-import { Console } from 'console';
 
 
 @Component({

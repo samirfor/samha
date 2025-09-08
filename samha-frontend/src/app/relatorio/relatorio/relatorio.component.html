@@ -5,15 +5,21 @@
     (onItemClick)="selectTab($event)">
   </dx-tabs>
 
-  <div *ngIf="selectedTab == 1">
-    <samha-relatorio-professor [senhaControl]="senhaControl" [enviarEmailControl]="enviarEmailControl" [authenticated]="authenticated" [anoControl]="anoControl" [semestreControl]="semestreControl"></samha-relatorio-professor>
-  </div>
+  
   <div *ngIf="selectedTab == 0">
     <samha-relatorio-turma [senhaControl]="senhaControl" [enviarEmailControl]="enviarEmailControl" [authenticated]="authenticated" [anoControl]="anoControl" [semestreControl]="semestreControl"></samha-relatorio-turma>
   </div>
 
+  <div *ngIf="selectedTab == 1">
+    <samha-relatorio-professor [senhaControl]="senhaControl" [enviarEmailControl]="enviarEmailControl" [authenticated]="authenticated" [anoControl]="anoControl" [semestreControl]="semestreControl"></samha-relatorio-professor>
+  </div>
+
   <div *ngIf="selectedTab == 2">
     <samha-relatorio-disciplina [senhaControl]="senhaControl" [enviarEmailControl]="enviarEmailControl" [authenticated]="authenticated" [anoControl]="anoControl" [semestreControl]="semestreControl"></samha-relatorio-disciplina>
+  </div>
+
+  <div *ngIf="selectedTab == 3">
+    <samha-relatorio-disciplina-ofertada [senhaControl]="senhaControl" [enviarEmailControl]="enviarEmailControl" [authenticated]="authenticated" [anoControl]="anoControl" [semestreControl]="semestreControl"></samha-relatorio-disciplina-ofertada>
   </div>
 
 

@@ -2,6 +2,7 @@ package com.samha.controller;
 
 import com.samha.application.commons.QueryEntities;
 import com.samha.application.disciplina.GerarRelatorioDisciplina;
+import com.samha.application.disciplina.GerarRelatorioDisciplinaOfertada;
 import com.samha.application.professor.GerarRelatorioProfessor;
 import com.samha.application.professor.ObterAulasProfessores;
 import com.samha.application.turma.GerarRelatorioTurmas;
@@ -96,6 +97,11 @@ public class PublicController {
         return facade.execute(new GerarRelatorioDisciplina(relatorioDto));
     }
 
+    @PostMapping("gerar-relatorio-disciplina-ofertada")
+    public Map<String, Object> gerarRelatorioDisciplinaOfertada(@RequestBody RelatorioDto relatorioDto) {
+        return facade.execute(new GerarRelatorioDisciplinaOfertada(relatorioDto));
+    }
+    
     private void validateQuery(Query query) {
         query.getProjections().forEach( p -> {
             if (!(p.equals("id") || p.equals("nome"))) throw new BusinessException("Você está tentando utilizar parâmetros não permitidos.");

@@ -26,6 +26,10 @@ export class RelatorioComponent implements OnInit, OnDestroy {
     {
       text: 'Disciplinas',
       id: 2
+    },
+    {
+      text: 'Disciplinas Ofertadas',
+      id: 3
     }
   ];
   public selectedTab: number = 0;

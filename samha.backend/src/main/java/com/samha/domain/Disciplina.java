@@ -39,6 +39,9 @@ public class Disciplina extends BaseLogEntity {
     
     @Column(nullable = false)
     private int periodo;
+
+    @Column(nullable = false)
+    private int qtVagas;
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "matriz_id", nullable = false)
@@ -92,7 +95,6 @@ public class Disciplina extends BaseLogEntity {
         this.periodo = periodo;
     }
 
-
     public void setQtAulas(int qtAulas) {
         this.qtAulas = qtAulas;
     }
@@ -103,6 +105,14 @@ public class Disciplina extends BaseLogEntity {
 
     public void setMatriz(MatrizCurricular matriz) {
         this.matriz = matriz;
+    }
+
+    public int getQtVagas(){
+        return qtVagas;
+    }
+
+    public void setQtVagas(int qtVagas){
+        this.qtVagas = qtVagas;
     }
 
     @Override

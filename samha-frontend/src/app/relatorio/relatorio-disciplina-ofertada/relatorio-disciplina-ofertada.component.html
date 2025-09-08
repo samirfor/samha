@@ -1,0 +1,51 @@
+<mat-card>
+    <div class="container container-fluid">
+    <div style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 16px;">
+        <div class="col-md-3">
+            <mat-form-field appearance="outline" class="d-block">
+            <mat-label>Eixo</mat-label>
+            <mat-select [formControl]="form.controls.eixo" *ngIf="eixos$ | async as eixos; else loading" [compareWith]="compareFunction" (selectionChange)="onEixoSelected($event)">
+                <mat-option *ngFor="let eixo of eixos" [value]="eixo">{{eixo.nome}}</mat-option>
+            </mat-select>
+            <ng-template #loading>
+                <mat-select [disabled]="true"></mat-select>
+            </ng-template>
+            </mat-form-field>
+        </div>
+
+        <div class="col-md-3">
+            <mat-form-field appearance="outline" class="d-block">
+            <mat-label>Curso</mat-label>
+            <mat-select [formControl]="form.controls.curso" *ngIf="curso$ | async as cursos; else loadingcursos" [compareWith]="compareFunction">
+                <mat-option *ngFor="let curso of cursos.listMap" [value]="curso">{{curso.nome}}</mat-option>
+            </mat-select>
+            <ng-template #loadingcursos>
+                <mat-select [disabled]="true"></mat-select>
+            </ng-template>
+            </mat-form-field>
+        </div>
+        
+        <mat-form-field appearance="outline" style="width: 100px; flex-shrink: 0;">
+            <mat-label>Ano</mat-label>
+            <input matInput type="number" [formControl]="form.controls.ano" (change)="gerarRelatorio()">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width: 100px; flex-shrink: 0;">
+            <mat-label>Semestre</mat-label>
+            <input matInput type="number" [max]="2" [min]="1" [formControl]="form.controls.semestre">
+        </mat-form-field>
+    </div>
+
+    <div class="col-12">
+      <dx-button
+        type="success"
+        class="w-100"
+        icon="pdffile"
+        text="Gerar Relatório"
+        [disabled]="form.invalid"
+        (onClick)="gerarRelatorio()">
+      </dx-button>
+    </div>
+    
+  </div>
+</mat-card>

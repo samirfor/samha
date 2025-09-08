@@ -9,7 +9,8 @@ export const disciplinaColumns: TableColumnModel[] = [
   {columnDef: 'tipo', header: 'Tipo', visible: true},
   {columnDef: 'cargaHoraria', header: 'Carga Horária', visible: true},
   {columnDef: 'qtAulas', header: 'Quantidade de Aulas', visible: true},
-  {columnDef: 'periodo', header: 'Período', visible: true}
+  {columnDef: 'periodo', header: 'Período', visible: true},
+  {columnDef: 'qtVagas', header: "Quantidade Vagas", visible: true}
 ]
 
 export const disciplinaLogColumns: TableColumnModel[] = [

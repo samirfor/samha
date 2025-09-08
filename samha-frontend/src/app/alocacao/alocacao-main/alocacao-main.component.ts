@@ -83,7 +83,6 @@ export class AlocacaoMainComponent implements OnInit {
     
     if (cursoSelecionadoRaw && cursoSelecionadoRaw.trim() !== '') {
       const cursoSelecionado = JSON.parse(cursoSelecionadoRaw);
-      console.log("ngOnInit: cursoSelecionado", cursoSelecionado);
       this.cursoControl.setValue(cursoSelecionado);
       this.onCursoChange(cursoSelecionado);
     }

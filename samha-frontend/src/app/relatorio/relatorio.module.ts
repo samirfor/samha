@@ -14,9 +14,10 @@ import { RelatorioTurmaComponent } from './relatorio-turma/relatorio-turma.compo
 import { ConfirmGenerationPopupComponent } from './confirm-generation-popup/confirm-generation-popup.component';
 import { ReportAulaGridComponent } from './report-aula-grid/report-aula-grid.component';
 import { RelatorioDisciplinaComponent } from './relatorio-disciplina/relatorio-disciplina.component';
+import { RelatorioDisciplinaOfertadaComponent } from './relatorio-disciplina-ofertada/relatorio-disciplina-ofertada.component';
 
 @NgModule({
-    declarations: [RelatorioComponent, RelatorioProfessorComponent, RelatorioTurmaComponent, ConfirmGenerationPopupComponent, ReportAulaGridComponent, RelatorioDisciplinaComponent],
+    declarations: [RelatorioComponent, RelatorioProfessorComponent, RelatorioTurmaComponent, ConfirmGenerationPopupComponent, ReportAulaGridComponent, RelatorioDisciplinaComponent, RelatorioDisciplinaOfertadaComponent],
   imports: [
     CommonModule,
     FormsModule,

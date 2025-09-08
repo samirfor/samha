@@ -61,7 +61,8 @@ export class DisciplinaFormComponent implements OnInit, OnDestroy {
       cargaHoraria: [this.disciplina?.cargaHoraria ? this.disciplina?.cargaHoraria : 60, [Validators.required]],
       qtAulas: [this.disciplina?.qtAulas, [Validators.required]],
       periodo: [this.disciplina?.periodo],
-      tipo: [this.disciplina?.tipo, Validators.required]
+      tipo: [this.disciplina?.tipo, Validators.required],
+      qtVagas: [this.disciplina?.qtVagas, [Validators.required]]
     });
 
   }
@@ -134,7 +135,8 @@ export class DisciplinaFormComponent implements OnInit, OnDestroy {
       sigla: this.form.get('sigla').value,
       tipo: this.form.get('tipo').value,
       cargaHoraria: this.form.get('cargaHoraria').value,
-      matriz: this.form.get('matriz').value
+      matriz: this.form.get('matriz').value,
+      qtVagas : this.form.get('qtVagas').value
     }
   }
 

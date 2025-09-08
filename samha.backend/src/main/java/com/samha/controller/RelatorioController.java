@@ -1,6 +1,7 @@
 package com.samha.controller;
 
 import com.samha.application.disciplina.GerarRelatorioDisciplina;
+import com.samha.application.disciplina.GerarRelatorioDisciplinaOfertada;
 import com.samha.application.professor.GerarRelatorioProfessor;
 import com.samha.application.professor.ObterAulasProfessores;
 import com.samha.application.turma.GerarRelatorioTurmas;
@@ -50,5 +51,10 @@ public class RelatorioController {
     @PostMapping("gerar-relatorio-disciplina")
     public Map<String, Object> gerarRelatorioDisciplina(@RequestBody RelatorioDto relatorioDto) {
         return facade.execute(new GerarRelatorioDisciplina(relatorioDto));
+    }
+
+    @PostMapping("gerar-relatorio-disciplina-ofertada")
+    public Map<String, Object> gerarRelatorioDisciplinaOfertada(@RequestBody RelatorioDto relatorioDto) {
+        return facade.execute(new GerarRelatorioDisciplinaOfertada(relatorioDto));
     }
 }
