@@ -1,0 +1,249 @@
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="relatorioDisciplinaOfertada" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e080e818-da9d-44d2-9bdb-4f49ebb13871">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="292"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="698"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MySqlConectoin"/>
+	<parameter name="cursoId" class="java.lang.Long"/>
+	<parameter name="ano" class="java.lang.Integer"/>
+	<parameter name="semestre" class="java.lang.Integer"/>
+	<parameter name="nomeCurso" class="java.lang.String"/>
+	<query language="SQL"><![CDATA[select	distinct
+		d.periodo
+,		t.nome		as nome_turma
+,		d.nome
+,		c.nome 		as nome_curso
+,		mc.nome		as nome_matriz
+,		d.qt_vagas
+,		a.turno
+,		d.tipo
+,		s.nome		as nome_professor1
+,		(
+		select	s.nome
+		from	professor p2
+		join	servidor s
+				on	p2.professor_id		= s.id
+		where	al.professor2_id		= p2.professor_id
+		)			as nome_professor2
+,		a.dia
+,		case 
+			when a.dia = 0 then 'Segunda-feira'
+            when a.dia = 1 then 'Terça-feira'
+            when a.dia = 2 then 'Quarta-feira'
+            when a.dia = 3 then 'Quinta-feira'
+            when a.dia = 4 then 'Sexta-feira'
+		end			as	dia_semada
+,		a.numero
+,		case
+			when a.numero = 0 then '07:00 - 07:50'
+            when a.numero = 1 then '07:50 - 08:40'
+            when a.numero = 2 then '08:40 - 09:30'
+            when a.numero = 3 then '09:50 - 10:40'
+            when a.numero = 4 then '10:40 - 11:30'
+            when a.numero = 5 then '11:30 - 12:20'
+            when a.numero = 6 then '13:00 - 13:50'
+            when a.numero = 7 then '13:50 - 14:40'
+            when a.numero = 8 then '14:40 - 15:30'
+            when a.numero = 9 then '15:50 - 16:40'
+            when a.numero = 10 then '16:40 - 17:30'
+            when a.numero = 11 then '17:30 - 18:20'
+            when a.numero = 12 then '18:50 - 19:35'
+            when a.numero = 13 then '19:35 - 20:20'
+            when a.numero = 14 then '20:30 - 21:15'
+            when a.numero = 15 then '21:15 - 22:00'
+		end			as horario
+from	curso c
+join	matriz_curricular mc
+		on	c.id			= mc.curso_id
+join	turma t
+		on	mc.id			= t.matriz_curricular_id
+join	oferta o
+		on	t.id			= o.turma_id
+join	aula a
+		on	o.id			= a.oferta_id
+join	alocacao al
+		on	a.alocacao_id	= al.id
+join	disciplina d
+		on	al.disciplina_id	= d.id
+join	professor p1
+		on	al.professor1_id	= p1.professor_id
+join	servidor s
+		on	p1.professor_id		= s.id
+where 	c.id				= $P{cursoId}
+and		o.ano				= $P{ano}
+and		o.semestre			= $P{semestre}
+
+order by	d.periodo
+,			t.nome
+,			mc.nome
+,			d.nome
+,			a.dia
+,			a.numero]]></query>
+	<field name="periodo" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="periodo"/>
+		<property name="com.jaspersoft.studio.field.label" value="periodo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="disciplina"/>
+	</field>
+	<field name="nome_turma" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nome"/>
+		<property name="com.jaspersoft.studio.field.label" value="nome_turma"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="turma"/>
+	</field>
+	<field name="nome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nome"/>
+		<property name="com.jaspersoft.studio.field.label" value="nome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="disciplina"/>
+	</field>
+	<field name="nome_curso" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nome"/>
+		<property name="com.jaspersoft.studio.field.label" value="nome_curso"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="curso"/>
+	</field>
+	<field name="nome_matriz" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nome"/>
+		<property name="com.jaspersoft.studio.field.label" value="nome_matriz"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="matriz_curricular"/>
+	</field>
+	<field name="qt_vagas" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="qt_vagas"/>
+		<property name="com.jaspersoft.studio.field.label" value="qt_vagas"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="disciplina"/>
+	</field>
+	<field name="turno" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="turno"/>
+		<property name="com.jaspersoft.studio.field.label" value="turno"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="aula"/>
+	</field>
+	<field name="tipo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tipo"/>
+		<property name="com.jaspersoft.studio.field.label" value="tipo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="disciplina"/>
+	</field>
+	<field name="nome_professor1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nome"/>
+		<property name="com.jaspersoft.studio.field.label" value="nome_professor1"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="servidor"/>
+	</field>
+	<field name="nome_professor2" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nome_professor2"/>
+		<property name="com.jaspersoft.studio.field.label" value="nome_professor2"/>
+	</field>
+	<field name="dia" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="dia"/>
+		<property name="com.jaspersoft.studio.field.label" value="dia"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="aula"/>
+	</field>
+	<field name="dia_semada" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="dia_semada"/>
+		<property name="com.jaspersoft.studio.field.label" value="dia_semada"/>
+	</field>
+	<field name="numero" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="numero"/>
+		<property name="com.jaspersoft.studio.field.label" value="numero"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="aula"/>
+	</field>
+	<field name="horario" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="horario"/>
+		<property name="com.jaspersoft.studio.field.label" value="horario"/>
+	</field>
+	<variable name="HorarioConcat" resetType="Group" resetGroup="GroupDiaSemana" class="java.lang.String">
+		<expression><![CDATA[($V{HorarioConcat} == null ? "": $V{HorarioConcat}+ "; " ) + $F{horario}]]></expression>
+	</variable>
+	<group name="Group1">
+		<expression><![CDATA[$F{periodo}]]></expression>
+		<groupHeader>
+			<band height="21">
+				<element kind="rectangle" uuid="080c09ff-4607-418e-babe-4504810901d6" x="0" y="0" width="555" height="21" backcolor="#D9D9D9">
+					<pen lineColor="#FFFFFF"/>
+				</element>
+				<element kind="textField" uuid="9d480e11-16b6-499d-9e71-a18750aa334d" x="3" y="0" width="66" height="20" bold="true" vTextAlign="Middle">
+					<expression><![CDATA["Período: "+$F{periodo} + "°"]]></expression>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</element>
+				<element kind="textField" uuid="c2b0266f-bfd5-4e72-aed7-27be93487032" x="70" y="0" width="180" height="20" bold="true" vTextAlign="Middle">
+					<expression><![CDATA["Turma: "+ $F{nome_turma}]]></expression>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</element>
+				<element kind="textField" uuid="2a893f28-0630-4516-9347-7327d640d4d2" x="250" y="0" width="180" height="20" bold="true" vTextAlign="Middle">
+					<expression><![CDATA["Matriz Curricular: "+$F{nome_matriz}]]></expression>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</element>
+				<element kind="textField" uuid="25797fe5-8c69-482f-b34f-7a7b31a4f2a5" x="430" y="0" width="124" height="20" italic="false" bold="true" vTextAlign="Middle">
+					<expression><![CDATA["Turno: " +($F{turno} == 0 ? "Matutino" : ($F{turno} == 6 ? "Vespertino" : ($F{turno} == 12 ? "Noturno" : "VALOR INSEPERADO")))]]></expression>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</element>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="Group2" keepTogether="true">
+		<expression><![CDATA[$F{nome}]]></expression>
+		<groupHeader>
+			<band height="59">
+				<element kind="textField" uuid="220ebedf-c33e-449a-a004-d53ef3aa3a64" x="11" y="0" width="544" height="18" bold="true" vTextAlign="Middle">
+					<expression><![CDATA["Disciplina: " + $F{nome}]]></expression>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</element>
+				<element kind="textField" uuid="e07b5efc-ff9f-4c88-9973-73b7f312f6ed" x="58" y="39" width="242" height="18" vTextAlign="Middle">
+					<expression><![CDATA["Professor 1: " + $F{nome_professor1}]]></expression>
+				</element>
+				<element kind="textField" uuid="65bf928a-f263-42d7-8fb3-c5e9c0370124" x="300" y="39" width="254" height="18" vTextAlign="Middle">
+					<expression><![CDATA[($F{nome_professor2} == null ? "" : "Professor 2: " + $F{nome_professor2})]]></expression>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</element>
+				<element kind="textField" uuid="570405a1-64e9-494c-90e8-c4a69a5931e7" x="11" y="18" width="242" height="18" bold="true" vTextAlign="Middle">
+					<expression><![CDATA["N° de Vagas: " + $F{qt_vagas}]]></expression>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</element>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="5">
+				<element kind="line" uuid="c8e432c4-edb9-4cb6-ac5c-48813c8be53c" x="0" y="1" width="555" height="1">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</element>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="GroupDiaSemana">
+		<expression><![CDATA[$F{dia_semada}]]></expression>
+		<groupHeader>
+			<band>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="19">
+				<element kind="textField" uuid="050ddbe3-d326-4e56-b992-69b394c9fe2e" x="185" y="0" width="370" height="18" hTextAlign="Left" vTextAlign="Middle">
+					<expression><![CDATA["Horário: " + $V{HorarioConcat}]]></expression>
+				</element>
+				<element kind="textField" uuid="3e446a68-f753-44ba-9f26-034a2dba123e" x="58" y="0" width="126" height="18" vTextAlign="Middle">
+					<expression><![CDATA["Dia: " + $F{dia_semada}]]></expression>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</element>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</band>
+		</groupFooter>
+	</group>
+	<background splitType="Stretch"/>
+	<pageHeader height="65">
+		<element kind="line" uuid="db34140d-5aec-4b46-86be-8b11c60d4bba" x="0" y="63" width="555" height="1">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<pen lineWidth="2.0"/>
+		</element>
+		<element kind="textField" uuid="fb2af304-7260-4513-b742-f59d3ac38402" x="184" y="5" width="370" height="28" fontSize="16.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<expression><![CDATA["Relatório de Disciplinas Ofertadas"]]></expression>
+		</element>
+		<element kind="textField" uuid="9485ce3b-8b75-4784-976c-4e74d848f535" x="185" y="35" width="370" height="20" fontSize="14.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<expression><![CDATA[$P{nomeCurso}]]></expression>
+		</element>
+		<element kind="image" uuid="a7bc1600-f245-4674-a82d-56711def6d24" stretchType="NoStretch" x="5" y="5" width="179" height="50" scaleImage="RealSize">
+			<expression><![CDATA["C:/Guidoni/workspaces/WEB/samha/samha.backend/src/main/resources/images/logo_ifes_2.png"]]></expression>
+		</element>
+	</pageHeader>
+	<pageFooter height="15">
+		<element kind="textField" uuid="4866968f-d61e-451e-be78-0acfc7090ffc" x="475" y="-1" width="80" height="16" hTextAlign="Right">
+			<expression><![CDATA["Página: " + $V{PAGE_NUMBER}]]></expression>
+		</element>
+	</pageFooter>
+</jasperReport>

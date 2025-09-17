@@ -15,6 +15,7 @@ import com.samha.domain.Eixo;
 import com.samha.domain.Label;
 import com.samha.domain.Professor;
 import com.samha.domain.Turma;
+import com.samha.domain.dto.RelatorioDisciplinaOfertadaDto;
 import com.samha.domain.dto.RelatorioDto;
 import com.samha.persistence.filter.PagedList;
 import com.samha.persistence.filter.Query;
@@ -98,7 +99,7 @@ public class PublicController {
     }
 
     @PostMapping("gerar-relatorio-disciplina-ofertada")
-    public Map<String, Object> gerarRelatorioDisciplinaOfertada(@RequestBody RelatorioDto relatorioDto) {
+    public Map<String, Object> gerarRelatorioDisciplinaOfertada(@RequestBody RelatorioDisciplinaOfertadaDto relatorioDto) {
         return facade.execute(new GerarRelatorioDisciplinaOfertada(relatorioDto));
     }
     

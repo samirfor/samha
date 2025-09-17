@@ -5,22 +5,19 @@ import {DataService} from "../../shared/service/data.service";
 import {NotificationService} from "../../shared/service/notification.service";
 import {HttpEvent, HttpEventType} from "@angular/common/http";
 import {FunctionHelper} from "../../shared/function-helper";
-import {RelatorioDto} from "../../meta-model/relatorio-professor";
+import {RelatorioDisciplinaOfertadaDto} from "../../meta-model/relatorio-disciplina-ofertada";
 import {AuthService} from "../../shared/service/auth.service";
 import {PagedList} from "../../shared/paged-list";
 import {MatSelectChange} from "@angular/material/select";
 import {QueryMirror} from "../../shared/query-mirror";
 import {map} from "rxjs/operators";
+import { Console } from 'console';
 
 @Component({
   selector: 'samha-relatorio-disciplina-ofertada',
   templateUrl: './relatorio-disciplina-ofertada.component.html'
 })
 export class RelatorioDisciplinaOfertadaComponent implements OnInit, OnDestroy {
-  // @Input() public cursoControl: FormControl;
-  // @Input() public semestreControl: FormControl;
-  // @Input() public anoControl: FormControl;
-  // @Input() public enviarEmailControl: FormControl;
   @Input() public authenticated: boolean;
   @Input() public senhaControl: FormControl;
 
@@ -64,13 +61,12 @@ export class RelatorioDisciplinaOfertadaComponent implements OnInit, OnDestroy {
     this.gerarPdfSub?.unsubscribe();
   }
 
-  private getRelatorioDto(): RelatorioDto {
+  private getRelatorioDto(): RelatorioDisciplinaOfertadaDto {
     return {
       ano: this.form.controls['ano'].value,
       semestre: this.form.controls['semestre'].value,
       cursoId: this.form.controls['curso'].value?.id,
-      enviarEmail: false,
-      senha: this.senhaControl.value
+      nomeCurso: this.form.get('curso').value?.nome
     }
   }
 

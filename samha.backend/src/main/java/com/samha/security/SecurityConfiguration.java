@@ -1,55 +1,53 @@
 package com.samha.security;
 
+
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfiguration {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-    
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    private final UserDetailsService userDetailsService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
-        SamhaAuthenticationFilter authenticationFilter = new SamhaAuthenticationFilter(authenticationManager);
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        SamhaAuthenticationFilter authenticationFilter = new SamhaAuthenticationFilter(authenticationManagerBean());
         authenticationFilter.setFilterProcessesUrl("/api/login");
-
-        http
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(
-                    new AntPathRequestMatcher("/*"),
-                    new AntPathRequestMatcher("/assets/**"),
-                    new AntPathRequestMatcher("/api/login/**"),
-                    new AntPathRequestMatcher("/api/auth/**"),
-                    new AntPathRequestMatcher("/api/public/**")
-                ).permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/api/**", "GET")).hasAnyAuthority("COORDENADOR_ACADEMICO", "COORDENADOR_CURSO")
-                .requestMatchers(new AntPathRequestMatcher("/api/**", "POST")).hasAnyAuthority("COORDENADOR_ACADEMICO", "COORDENADOR_CURSO")
-                .requestMatchers(new AntPathRequestMatcher("/api/**", "PATCH")).hasAnyAuthority("COORDENADOR_ACADEMICO", "COORDENADOR_CURSO")
-            );
-
-        return http.build();
+        http.csrf(csrf -> csrf.disable());
+        http.sessionManagement(management -> management.sessionCreationPolicy(STATELESS));
+        http.authorizeRequests(requests -> requests.antMatchers(
+                "/*",
+                "/assets/**",
+                "/api/login/**",
+                "/api/auth/**",
+                "/api/public/**"
+        ).permitAll());
+        http.authorizeRequests(requests -> requests.antMatchers(HttpMethod.GET, "/api/**").hasAnyAuthority("COORDENADOR_ACADEMICO", "COORDENADOR_CURSO"));
+        http.authorizeRequests(requests -> requests.antMatchers(HttpMethod.POST, "/api/**").hasAnyAuthority("COORDENADOR_ACADEMICO", "COORDENADOR_CURSO"));
+        http.authorizeRequests(requests -> requests.antMatchers(HttpMethod.PATCH, "/api/**").hasAnyAuthority("COORDENADOR_ACADEMICO", "COORDENADOR_CURSO"));
+        http.authorizeRequests(requests -> requests.antMatchers(HttpMethod.DELETE, "/api/**").hasAnyAuthority("COORDENADOR_ACADEMICO", "COORDENADOR_CURSO"));
+        http.authorizeRequests(requests -> requests.antMatchers(HttpMethod.PUT, "/api/**").hasAnyAuthority("COORDENADOR_ACADEMICO", "COORDENADOR_CURSO"));
+        http.authorizeRequests(requests -> requests.anyRequest().authenticated());
+        http.addFilter(authenticationFilter);
+        http.addFilterBefore(new SamhaAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

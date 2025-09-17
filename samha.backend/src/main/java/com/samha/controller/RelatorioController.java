@@ -9,6 +9,7 @@ import com.samha.application.turma.ObterAulasTurmaRelatorio;
 import com.samha.commons.UseCaseFacade;
 import com.samha.domain.Professor;
 import com.samha.domain.Turma;
+import com.samha.domain.dto.RelatorioDisciplinaOfertadaDto;
 import com.samha.domain.dto.RelatorioDto;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,7 +55,7 @@ public class RelatorioController {
     }
 
     @PostMapping("gerar-relatorio-disciplina-ofertada")
-    public Map<String, Object> gerarRelatorioDisciplinaOfertada(@RequestBody RelatorioDto relatorioDto) {
+    public Map<String, Object> gerarRelatorioDisciplinaOfertada(@RequestBody RelatorioDisciplinaOfertadaDto relatorioDto) {
         return facade.execute(new GerarRelatorioDisciplinaOfertada(relatorioDto));
     }
 }
