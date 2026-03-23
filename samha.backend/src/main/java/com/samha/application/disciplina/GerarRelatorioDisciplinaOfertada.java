@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -47,10 +48,15 @@ public class GerarRelatorioDisciplinaOfertada extends UseCase<Map<String, Object
         try {
             Connection conexao = dataSource.getConnection();
 
+            String caminhoArquivo = "relatorio/relatorioDisciplinaOfertada.jasper";
+            InputStream reportStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(caminhoArquivo);
+
+            JasperReport report = (JasperReport) JRLoader.loadObject(reportStream);
+            /*
             String caminhoArquivo = "relatorio/relatorioDisciplinaOfertada.jrxml";
             InputStream arquivo = Thread.currentThread().getContextClassLoader().getResourceAsStream(caminhoArquivo);
             JasperReport report = JasperCompileManager.compileReport(arquivo);
-            
+            */
             JasperPrint print = JasperFillManager.fillReport(report, parametros, conexao);
             byte[] dadosRel =  JasperExportManager.exportReportToPdf(print);
 
@@ -71,6 +77,7 @@ public class GerarRelatorioDisciplinaOfertada extends UseCase<Map<String, Object
         parametros.put("ano", relDto.getAno());
         parametros.put("semestre", relDto.getSemestre());
         parametros.put("nomeCurso", relDto.getNomeCurso());
+        parametros.put("logo", "images/logo_ifes_2.png");
     }
 }
 

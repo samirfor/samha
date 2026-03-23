@@ -8,6 +8,7 @@
 	<parameter name="ano" class="java.lang.Integer"/>
 	<parameter name="semestre" class="java.lang.Integer"/>
 	<parameter name="nomeCurso" class="java.lang.String"/>
+	<parameter name="logo" class="java.lang.String"/>
 	<query language="SQL"><![CDATA[select	distinct
 		d.periodo
 ,		t.nome		as nome_turma
@@ -168,7 +169,7 @@ order by	d.periodo
 					<expression><![CDATA["Matriz Curricular: "+$F{nome_matriz}]]></expression>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</element>
-				<element kind="textField" uuid="25797fe5-8c69-482f-b34f-7a7b31a4f2a5" x="430" y="0" width="124" height="20" italic="false" bold="true" vTextAlign="Middle">
+				<element kind="textField" uuid="25797fe5-8c69-482f-b34f-7a7b31a4f2a5" x="430" y="0" width="124" height="20" bold="true" italic="false" vTextAlign="Middle">
 					<expression><![CDATA["Turno: " +($F{turno} == 0 ? "Matutino" : ($F{turno} == 6 ? "Vespertino" : ($F{turno} == 12 ? "Noturno" : "VALOR INSEPERADO")))]]></expression>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -226,19 +227,19 @@ order by	d.periodo
 		</groupFooter>
 	</group>
 	<background splitType="Stretch"/>
-	<pageHeader height="65">
+	<pageHeader height="71">
 		<element kind="line" uuid="db34140d-5aec-4b46-86be-8b11c60d4bba" x="0" y="63" width="555" height="1">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<pen lineWidth="2.0"/>
+		</element>
+		<element kind="image" uuid="93d3c966-8700-4f3c-bd09-79119a5f7be6" x="0" y="5" width="185" height="50">
+			<expression><![CDATA[$P{logo}]]></expression>
 		</element>
 		<element kind="textField" uuid="fb2af304-7260-4513-b742-f59d3ac38402" x="184" y="5" width="370" height="28" fontSize="16.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<expression><![CDATA["Relatório de Disciplinas Ofertadas"]]></expression>
 		</element>
 		<element kind="textField" uuid="9485ce3b-8b75-4784-976c-4e74d848f535" x="185" y="35" width="370" height="20" fontSize="14.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<expression><![CDATA[$P{nomeCurso}]]></expression>
-		</element>
-		<element kind="image" uuid="a7bc1600-f245-4674-a82d-56711def6d24" stretchType="NoStretch" x="5" y="5" width="179" height="50" scaleImage="RealSize">
-			<expression><![CDATA["C:/Guidoni/workspaces/WEB/samha/samha.backend/src/main/resources/images/logo_ifes_2.png"]]></expression>
 		</element>
 	</pageHeader>
 	<pageFooter height="15">
