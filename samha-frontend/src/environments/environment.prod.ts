@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://www.samha.colatina.ifes.edu.br/api' 
+  apiUrl: 'http://www.samha.colatina.ifes.edu.br/api' 
 };
