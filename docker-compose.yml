@@ -1,0 +1,75 @@
+services:
+  mysql:
+    image: mysql:8.0.28
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: samha
+      MYSQL_ROOT_PASSWORD: 12345678
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - samha-net
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/samha?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 12345678
+      SAMHA_BOOTSTRAP_ADMIN_ENABLED: "true"
+      SAMHA_BOOTSTRAP_ADMIN_LOGIN: admin
+      SAMHA_BOOTSTRAP_ADMIN_PASSWORD: 123
+      SAMHA_BOOTSTRAP_ADMIN_PAPEL_NOME: COORDENADOR_ACADEMICO
+      JAVA_TOOL_OPTIONS: -Duser.home=/data
+    volumes:
+      - backend-home:/data
+    ports:
+      - "8080:8080"
+    networks:
+      - samha-net
+
+  frontend:
+    build:
+      context: .
+      dockerfile: samha-frontend/Dockerfile.frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    networks:
+      - samha-net
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: 12345678
+    ports:
+      - "9001:80"
+    networks:
+      - samha-net
+
+volumes:
+  mysql-data:
+  backend-home:
+
+networks:
+  samha-net:

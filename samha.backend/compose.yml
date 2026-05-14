@@ -1,3 +1,5 @@
+## Legacy compose kept for reference.
+## Use the root-level /home/ubuntu/git/samha/docker-compose.yml for the full stack.
 version: '3.5'
 
 services:

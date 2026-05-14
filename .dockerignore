@@ -1,0 +1,13 @@
+.git
+.idea
+.vscode
+.cursor
+terminals
+agent-transcripts
+
+**/node_modules
+**/dist
+**/target
+**/.angular
+**/.cache
+**/*.log

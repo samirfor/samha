@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -31,27 +32,23 @@ public class BeanConfiguration implements WebMvcConfigurer {
     @Bean
     CommandLineRunner generateJWTSecret() {
         return args -> {
+            String userHome = System.getProperty("user.home");
+            String filePath = userHome + "/secret.json";
+            File secretFile = new File(filePath);
+
+            if (secretFile.exists()) {
+                return;
+            }
+
             String secret = GenerateAlphaNumericString.getRandomString(256);
             JWTSecret jwtSecret = new JWTSecret(secret);
             Gson gson = new Gson();
 
-            // Obter o diretório do usuário
-            String userHome = System.getProperty("user.home");
-
-            // Definir o caminho absoluto para o arquivo
-            String filePath = userHome + "/secret.json";
-
             try {
-                // Criar um escritor para o arquivo
-                BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
-
-                // Converter o objeto jwtSecret em JSON e gravá-lo no arquivo
+                BufferedWriter writer = new BufferedWriter(new FileWriter(secretFile));
                 gson.toJson(jwtSecret, writer);
-
-                // Fechar o escritor
                 writer.close();
             } catch (IOException e) {
-                // Tratar erros de IO, se necessário
                 e.printStackTrace();
             }
         };
