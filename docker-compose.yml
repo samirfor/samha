@@ -52,6 +52,30 @@ services:
     networks:
       - samha-net
 
+  backend-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+      target: build
+    working_dir: /workspace
+    command: mvn -pl samha.backend test
+    profiles:
+      - test
+    networks:
+      - samha-net
+
+  frontend-tests:
+    build:
+      context: .
+      dockerfile: samha-frontend/Dockerfile.frontend
+      target: build
+    working_dir: /workspace/samha-frontend
+    command: sh -lc "export CHROME_BIN=$$(command -v chromium-browser || command -v chromium); npm test"
+    profiles:
+      - test
+    networks:
+      - samha-net
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     restart: unless-stopped

@@ -1,17 +1,60 @@
-In this project, I explored many technologies, with the objective of migrating a Java Swing application to a whole new web application.
+# SAMHA
 
-The backend was reformulated from the commonly used 5-layered architecture to Clean Architecture, using Spring Boot and applying REST pattern to the API calls.
+Sistema web para apoio à alocação docente do IFES Colatina.
 
-Using Angular to the front end, one of the most challenging this was to build a matrix 5×6 that uses drag-and-drop to allow user interaction, data modification and constraints check.
+## Stack
 
-The software was designed to help the coordinators of the Federal Institute of Espírito Santo — Colatina Campus by managing teacher allocation throughout many courses in three available class times (morning, afternoon, noon).
+- Frontend: Angular 13 em `samha-frontend/`
+- Backend: Spring Boot 2.6 em `samha.backend/`
+- Banco: MySQL 8
+- Migrações: Liquibase
+- Autenticação: Spring Security com JWT
 
-Spring Security was used to control authentication and authorization by checking JWT secret that is stored on user's browser.
+## Pré-requisitos
 
-In this project, I achieve to improve the user experience by 100%, reduce workload of the coordinators of generating reports by exposing specific public routes to access the reports in the application and reduce paper impression.
+- JDK 17
+- Maven
+- Node.js e npm compatíveis com Angular 13
+- Docker e Docker Compose
 
-This project it was part of my Final Paper, and was published by the Revista Contemporânea magazine and became a software that it is used by the federal government of Brazil, available at: http://samha.colatina.ifes.edu.br/
+## Como subir tudo
 
-You can check the publication here: https://ojs.revistacontemporanea.com/ojs/index.php/home/article/view/3351
+Use Docker Compose para subir a stack inteira:
 
-This was an amazing opportunity to grow as a developer, to every teacher that made this possible: Thank you! :)
+```bash
+docker compose up --build
+```
+
+Serviços expostos:
+
+- Frontend: [http://localhost:80](http://localhost:80)
+- Backend: [http://localhost:8080](http://localhost:8080)
+- phpMyAdmin: [http://localhost:9001](http://localhost:9001)
+
+O MySQL fica disponível apenas na rede interna do Compose e usa os dados de desenvolvimento definidos em `docker-compose.yml`.
+
+## Usuário admin inicial
+
+O `docker-compose.yml` já ativa o bootstrap do usuário admin com estas variáveis:
+
+- `SAMHA_BOOTSTRAP_ADMIN_ENABLED=true`
+- `SAMHA_BOOTSTRAP_ADMIN_LOGIN=admin`
+- `SAMHA_BOOTSTRAP_ADMIN_PASSWORD=123`
+- `SAMHA_BOOTSTRAP_ADMIN_PAPEL_NOME=COORDENADOR_ACADEMICO`
+
+O papel `COORDENADOR_ACADEMICO` é criado pelas migrações do Liquibase. No primeiro start, o backend cria o usuário admin se ele ainda não existir; se já existir, ele ajusta senha e papel para ficar alinhado com as variáveis do Compose.
+
+Esse bootstrap é só para desenvolvimento. Em produção, desative o bootstrap e use senha forte e segredo gerenciado fora do repositório.
+
+## Testes
+
+Use o Compose também para validar:
+
+```bash
+docker compose --profile test run --rm --build backend-tests
+docker compose --profile test run --rm --build frontend-tests
+```
+
+## Contexto
+
+O projeto nasceu da migração de uma aplicação Java Swing para uma aplicação web. Foi usado como trabalho final e publicado na Revista Contemporânea.

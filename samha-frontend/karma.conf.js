@@ -2,6 +2,8 @@
 // https://karma-runner.github.io/1.0/config/configuration-file.html
 
 module.exports = function (config) {
+  const isWatchMode = process.argv.some(arg => arg.startsWith('--watch'))
+    || process.argv.some(arg => arg.startsWith('--auto-watch'));
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
@@ -36,9 +38,15 @@ module.exports = function (config) {
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    autoWatch: true,
-    browsers: ['Chrome'],
-    singleRun: false,
+    autoWatch: isWatchMode,
+    customLaunchers: {
+      ChromeHeadlessNoSandbox: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox', '--disable-dev-shm-usage']
+      }
+    },
+    browsers: [isWatchMode ? 'Chrome' : 'ChromeHeadlessNoSandbox'],
+    singleRun: !isWatchMode,
     restartOnFileChange: true
   });
 };

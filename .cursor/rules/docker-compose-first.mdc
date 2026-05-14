@@ -1,0 +1,12 @@
+---
+description: Prefer Docker Compose for running the SAMHA stack and project commands
+alwaysApply: true
+---
+
+# Docker Compose First
+
+- Use `docker compose` as the primary way to run the stack.
+- Prefer containerized commands for backend, frontend, and test execution.
+- For tests, prefer `docker compose --profile test run --rm --build backend-tests` and `docker compose --profile test run --rm --build frontend-tests`.
+- Keep the documented workflow aligned with the Compose services and ports.
+- When adding new commands, document the `docker compose` equivalent first.

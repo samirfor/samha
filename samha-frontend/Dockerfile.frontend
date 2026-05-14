@@ -2,6 +2,8 @@ FROM node:18-alpine AS build
 
 WORKDIR /workspace/samha-frontend
 
+RUN apk add --no-cache chromium nss freetype harfbuzz ca-certificates ttf-freefont
+
 COPY samha-frontend/package.json samha-frontend/package-lock.json ./
 RUN npm ci
 
