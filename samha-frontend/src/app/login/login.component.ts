@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private sign(body: URLSearchParams): void {
     this.subscription = this.authService.login(body.toString()).subscribe(
       (result: TokenResponseModel)=> {
-        const regex = new RegExp('^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{8,}$');
+        const regex = new RegExp('^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).+$');
         const isSenhaValida = regex.test(this.form.value.senha);
         if (isSenhaValida) {
           this.localStorage.set("access_token", result.access_token);
@@ -67,8 +67,8 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.localStorage.clearTokens();
           const novaSenha = this.form.get('novaSenha');
           const confirmarSenha = this.form.get('confirmarSenha');
-          novaSenha.addValidators([Validators.required, Validators.pattern('^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{8,}$')])
-          confirmarSenha.addValidators([Validators.required, Validators.pattern('^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{8,}$')])
+          novaSenha.addValidators([Validators.required, Validators.pattern('^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).+$')])
+          confirmarSenha.addValidators([Validators.required, Validators.pattern('^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).+$')])
           novaSenha.markAsUntouched();
           confirmarSenha.markAsUntouched();
           novaSenha.markAsPristine();

@@ -40,7 +40,7 @@
         <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Esconder/Mostrar'" [attr.aria-pressed]="hide">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
-        <mat-hint>A senha deve conter pelo menos 1 (um) caractére especial (!#$%...) uma letra minúscula, uma maiúscula e um número, sendo no mínimo 8 caracteres.</mat-hint>
+        <mat-hint>A senha deve ter pelo menos 3 caracteres.</mat-hint>
       </mat-form-field>
       <mat-form-field appearance="standard" class="d-block">
         <mat-label>Selecione o tipo de usuário</mat-label>
